@@ -1,7 +1,7 @@
 # State
 
 - slug: amd-ai-league-lablab
-- stage: build, blocked on the notebook allowlist (AMD account exists; notebooks.amd.com/hackathon says the email is not registered for the hackathon; see NEEDS.md)
+- stage: blocked on the notebook allowlist; verifier FAILED (no AMD run); packet not finished; see REVIEW.md and NEEDS.md
 - track: Match 4 - Intelligent Web Information Retrieval (docs/prds/match-4.md)
 - repo: https://github.com/alexvec/amd-ai-league-lablab
 - url: https://amd-ai-league-lablab.vercel.app

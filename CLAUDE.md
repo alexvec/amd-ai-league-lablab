@@ -8,7 +8,7 @@ Every commit is authored as Alex Veciana Belmonte <38962279+alexvec@users.norepl
 
 ## Authorization
 
-Create every account, key, team, and deployment this entry needs. Use the operator profile at `/Users/alex/Documents/GitHub/hackathon-ops/operator.json`. Store new secrets in `.env`, which stays gitignored. Do not commit them.
+Create every account, key, team, and deployment this entry needs. Use the operator profile at `/Users/alex/Documents/GitHub/hackathon-ops/operator.json`. Store new secrets in `.env`, which stays gitignored. Do not commit them. Redeem every promo code and platform credit in docs/competition.md before any payment card.
 
 Stop and write the exact remaining step in NEEDS.md only when it needs a payment card, government ID, a tax form, or a code or captcha that only the operator can complete after you have tried.
 
@@ -18,7 +18,7 @@ Pushing this repository and deploying the app are part of the build.
 
 ## Integrity
 
-The entry is original work. Do not invent names, metrics, testimonials, or outcomes. docs/competition.md is the rule book. A rule that is not sourced stays marked unverified.
+The entry is original work. Do not invent names, metrics, testimonials, or outcomes. docs/competition.md is the rule book. A rule that is not sourced stays marked unverified. The required sponsor capability runs on real input. A labelled mock of that capability is not a finished entry.
 
 ## Avatar
 

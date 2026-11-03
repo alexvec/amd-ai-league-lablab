@@ -43,7 +43,19 @@ Source for the table: MAIN.
 - UNVERIFIED search-snippet only: a web search result for the LIVE URL was titled "Upcoming · Registration open starts Sep 1, 2026, 19:00 UTC", and the search tool's summary said submissions due "Dec 1, 2026, 19:00 UTC". I did not see this on a page I opened. Treat both as UNVERIFIED.
 - Late joining: "joining any day is allowed"; earlier points carry over 1:1. Source: MAIN.
 
+- OPERATOR OBSERVATION 2026-11-03 (browser, not verified by me): event page header shows "Submission deadline Dec 1, 11:00 PM GST" and the live page shows "ENDS IN 28 DAYS" and "Live, submissions open". This is the League-wide timer. It does not establish Match 4's close. Dec 1, 11:00 PM GST is 19:00 UTC on Dec 1, which matches the search-snippet "Dec 1, 2026, 19:00 UTC" above (arithmetic by me; GST = UTC+4). 28 days from Nov 3 is Dec 1, also consistent.
+- My own check 2026-11-03: I opened MAIN and LIVE through the summarizing fetch tool. MAIN returned no "Submission deadline" text and no "Ends in" timer. LIVE returned "Live · Submissions open" and a zeroed "Ends in" countdown (00 days 00 hrs 00 min 00 sec). I could not see the header or the 28-day timer, so I cannot confirm the operator's observation; the tool may not render client-side timers. Source: MAIN, LIVE.
+- Match 4 close date: still UNVERIFIED. MAIN says only that the final Match ends Nov 14. Treat Dec 1 as an upper bound for the League, not a Match 4 deadline, and plan to submit well before Nov 10 unless a Match 4 date appears.
+
 Implication (derived, not stated): on 2026-11-03 only Match 4 is confirmed live. Matches 5 and 6 are upcoming, so a prize-eligible Match 5 or 6 submission can only be made once that Match goes live. Match 4's close date is unknown, so its remaining time is unknown.
+
+### Credits (note)
+
+The $100 GPU credit conditions I could find:
+- MAIN: "Eligible new ADP members get credits to build on AMD infrastructure." Claiming credits is onboarding step two, worth +100 League points; sign-up is free via AMD sign-in. No other terms on MAIN. Source: https://lablab.ai/ai-hackathons/amd-lablab-ai-academy-challenge
+- AMD member perks page: "Receive $100 in AMD Developer Cloud credits." Tied to membership in the AMD AI Developer Program; you complete a form and, "Once your account has been verified," get an activation email. Covers one of two options: AMD Instinct Developer Cloud (raw GPU access) or Fireworks AI (managed LLM endpoint on AMD GPUs). Expiry: Developer Cloud "30 days after activation"; Fireworks "Within 90 days of issuance". Exclusions and payment-method requirement: not stated on that page. Source: https://developer.amd.com/member-perks/
+- Search-result summaries only (I did not open the pages; UNVERIFIED): approval takes 2-3 business days; a third-party write-up says a payment method must be added on the DigitalOcean-backed console even with credit, and that the credit warned of expiry in 30 days; AMD warns data and access are lost when credits run out. URLs: https://amd.com/en/developer/resources/technical-articles/2026/how-to-claim-amd-cloud-credits.html (timed out twice for me), https://lilting.ch/en/articles/amd-developer-cloud-credit-journey (not opened).
+- Published code: none found. Who exactly counts as "new": UNVERIFIED. Whether the credit also pays for lablab-side items: UNVERIFIED. Note the per-Match prizes (2nd place and top-50) are also paid as GPU credits (MAIN); their terms are UNVERIFIED.
 
 ## 3. Prizes (source: MAIN unless noted)
 
@@ -125,3 +137,94 @@ Onboarding +300 (claim credits +100, first course +100, AMD profile +50, join AM
 - Brief says "Joining the lablab Discord is required": MAIN says required for Match participation (consistent).
 - Potential conflict: lablab generic rules require a public GitHub repo, video, slides and a demo URL, while the Matches appear evaluator-graded; which applies is UNVERIFIED.
 - TERMS requires MIT-compatible open source submissions by default; the brief did not mention this.
+
+## Past winners
+
+Researched 2026-11-03. Pages opened through a summarizing fetch tool.
+
+### This event (AMD AI League), Matches 1-3
+- No Match 1-3 winners are listed on any page I opened. MAIN: "Who's winning" is empty; League podium is announced Dec 1. Source: https://lablab.ai/ai-hackathons/amd-lablab-ai-academy-challenge
+- LIVE: "Top builders by points" is empty. It shows an "AMD Quest XP" top 10 (Muhammad Ammar Zia 6,300 XP; Hasnain Ahmad 4,500; Nurali Kuzhagaliev 4,200 ...), which is a points standing, not a winner list. Mini-Challenge results shown: MC2 teams Nyctophile, J-I-N, TEST TEST each "200 · 10/10"; MC3 teams System Builder, AMDLab, Knight Eterniti, AIDLC, Athos Felipe, Moyu-Sentinel, Saudi Sign Intelligence each 200 · 10/10; System Builder leads team XP at 400. These are score listings, not prize placements. Source: https://lablab.ai/ai-hackathons/amd-lablab-ai-academy-challenge/live
+- Consequence: the 10/10 ceiling on MC2/MC3 suggests pass/fail style grading by AMD's evaluator (inference, UNVERIFIED). No MC2/MC3 winning project pages found; I do not know what any of them did.
+
+### Nearest earlier sponsor event (DIFFERENT EVENT: AMD Developer Hackathon, 2026)
+The event page says "This Event Has Finished", hybrid, on-site May 9-10 (San Francisco); search-result certificates give May 4-10, 2026 (certificate pages not opened; UNVERIFIED). Source: https://lablab.ai/ai-hackathons/amd-developer. Its results page lists:
+1. 1st, "Chaos Economy: Multi-Agent RL Market Simulator" by TechMavericks (labelled Winner/Champion): https://lablab.ai/ai-hackathons/amd-developer/techmavericks/chaos-economy-multi-agent-rl-market-simulator
+2. 2nd, Strike Lab: https://lablab.ai/ai-hackathons/amd-developer/strike-lab/strike-lab
+3. 3rd, Automato by BISAKOLAI: https://lablab.ai/ai-hackathons/amd-developer/bisakolai/automato
+Also shortlisted without placement: StudioMI300, Lumi, AtlasOps. Source for all: https://lablab.ai/ai-hackathons/amd-developer/live
+I did NOT open the three winner project pages, so what a judge could do in each demo and which AMD capability did the work are UNVERIFIED. I have no metrics for them.
+
+### REPOMIND (DIFFERENT EVENT: AMD Developer Hackathon 2026; placement not verified)
+Source: https://lablab.ai/ai-hackathons/amd-developer/repomind/repomind (opened). It is not among the winners listed on the results page above, and the page text states no placement (the fetch tool saw a medal icon whose filename suggested first place; I could not confirm it, treat as UNVERIFIED).
+- What it is, per the page: an open-source (MIT) repo-scale coding agent that ingests a whole git repository at 256K context on one AMD MI300X, with five tools: read_file, grep_codebase, execute_code, run_tests, git_log.
+- AMD capability doing the work, per the page: a single MI300X (192 GB) with ROCm 7.2 and vLLM 0.17.1 serving Qwen3-Coder-Next-FP8; the page argues an 80 GB H100 could not hold the roughly 143 GB workload on one card.
+- Evidence published: GitHub repo link, Hugging Face Space demo link, a presentation PDF, and an "Evidence pack" described as "7 JSON results + 5 plots + raw outputs + rocm-smi + benchmark scripts". No video listed. The page reports a 124-minute stress test, 31/31 concurrency passes (8K-64K context) and 9/9 correct repo Q&A answers. These are self-reported figures as read by the fetch tool; I did not open the repo, Space or evidence pack, so I do not repeat them as established results.
+- Lesson for this entry (derived): that event showed hardware-specific proof (rocm-smi, benchmarks). Whether this League's evaluator rewards that: UNVERIFIED.
+
+## Match 4 gallery
+
+All entries below are participant self-descriptions, unofficial, and unverified by AMD. Gallery list source: https://lablab.ai/apps (opened; it listed the Match 4 projects). Each entry's own page was opened only where noted.
+
+### Aperture (closest to our concept)
+https://lablab.ai/ai-hackathons/amd-lablab-ai-academy-challenge/aperture/aperture-web-retrieval-with-traceable-evidence (opened; created Oct 27, 2026; category Assistant; tags Qwen3, AMD ROCm).
+- Does: natural-language question plus optional start URL in; concise answer plus supporting source URLs out. Structure-preserving parsing (headings, tables, labelled fields). Evidence checks on literal support, provenance, answer type and qualifiers; returns an empty answer when evidence is insufficient. Locally hosted Qwen3-4B-Instruct-2507; no paid search, no remote inference API. Packaged "as a prebuilt Docker image using the required ROCm base, with model weights included." Page says "AMD GPU execution and official evaluator acceptance have not yet been verified." Repo: https://github.com/cs113062273-bot/AMD-AI-League-Match-4
+- Closeness: very close to an evidence-checked web retrieval agent that answers with source URLs and abstains when unsupported. The shared concept is not unique; differentiation would have to come from execution, not idea. (Our app's own design is not read here; "how close" is judged from the concept description in the task only.)
+- Format hints from its README (opened via the repo page, unofficial): CLI takes query ID, question, optional start URL; output example `{"answer":"BSD-3-Clause","sources":["https://pypi.org/pypi/httpx/json"]}`; empty answer and no sources when unsupported; Linux output default `/app/output`; Dockerfile "pins the organizer's exact ROCm image and digest"; models under /models/qwen; 12 GB GPU uses a 3072-token input cap. A search snippet (not seen on a page I opened) said each request runs as a fresh python3 process with a 24-second internal deadline. The README says its contract is a guess, not an organizer document.
+
+### Others (from the https://lablab.ai/apps listing; descriptions as returned, pages not individually opened unless noted)
+- WebScout Exact (opened): https://lablab.ai/ai-hackathons/amd-lablab-ai-academy-challenge/vadym-bilobrovets/webscout-exact-match-4-retrieval-agent. One exact value plus source page, written to a JSON file (answer, source URL, confidence); answer normalised "to match how the grader compares answers"; single Docker container on the ROCm PyTorch image; local Qwen3-4B-Instruct; no API keys; self-reported 7 of 8 on its own test set. Hint: grader does answer comparison against a normalised exact value.
+- AMD Volta: https://lablab.ai/ai-hackathons/amd-lablab-ai-academy-challenge/deflect/amd-volta-intelligent-web-retrieval-agent. Multi-hop research; HTML tables to Markdown; search-engine fallbacks; abstains on fictional hardware. Hint: fictional-entity (unanswerable) questions may be in the test set.
+- Exact Web Answer Agent: https://lablab.ai/ai-hackathons/amd-lablab-ai-academy-challenge/driedsandwich/exact-web-answer-agent-amd-ai-league-match-4. Single requested value with source page; empty answer rather than guess.
+- GreYat Web Scout: https://lablab.ai/ai-hackathons/amd-lablab-ai-academy-challenge/greyat/greyat-web-scout-grounded-web-retrieval. Exact value; reads package registries directly for "latest version" questions. Hint: version questions appear.
+- SourceCourt Exact Lite: https://lablab.ai/ai-hackathons/amd-lablab-ai-academy-challenge/null007void-labs/sourcecourt-exact-lite. Exact answers only when sources support; refuses otherwise; SSRF protections; CLI and container.
+- ChronosGraph (opened): https://lablab.ai/ai-hackathons/amd-lablab-ai-academy-challenge/chronosgraph-rocm/chronosgraph-temporal-web-verification-engine. 6-page, 2-hop budget; verbatim quote with SHA-256 receipt; prefers newer authoritative figures; refuses fictional queries. Public demo on CPU. The same page also describes a Mini-Challenge 2 OCR app with entrypoint `python3 /app/app.py --input-image <path>` writing `/app/output/<name>_output.json` (MC2 pattern, a different Match).
+- ROMA: https://lablab.ai/ai-hackathons/amd-lablab-ai-academy-challenge/roma/roma-autonomous-exact-web-intelligence-agent. Normalised target values with source URL; resident local model; keyless search; literal-substring verifier; empty on ungrounded queries.
+- Trifecta Checker (mentions Match 4 only as a planned extension): https://lablab.ai/ai-hackathons/amd-lablab-ai-academy-challenge/trifecta-checker/trifecta-checker-ai-safety-gate-for-lethal-agents.
+- AI Evaluation Lab (not tied to Match 4): https://lablab.ai/ai-hackathons/amd-lablab-ai-academy-challenge/ai-evaluation-lab/ai-evaluation-lab-reliable-agents-on-amd.
+- GitHub-only projects found by search, none official (Source Trail, ROMA, Tega1234567890/amd-match4-agent, Rafa-Innerchispa/amd-academy-mc4-web-retrieval, Ghafardesk/Mini-Challenge4, dcain2336, Joshua8976-spec, ctmakc/pinpoint-web-agent). Opened: Source Trail https://github.com/agammann/source-trail, Tega https://github.com/Tega1234567890/amd-match4-agent, Rafa https://github.com/Rafa-Innerchispa/amd-academy-mc4-web-retrieval, Ghafardesk https://github.com/Ghafardesk/Mini-Challenge4.
+
+Pattern across the gallery (unofficial): nearly every entry converges on "question + optional URL in, one exact value + source URL out, empty answer on unsupported, local Qwen3-4B on the ROCm base image in a Docker container, no external API keys". Overlap with an evidence-backed retrieval agent is therefore heavy; it is the default shape, not a niche. Only the lablab project pages are submissions; the gallery shows no scores, since official evaluator results are described as unavailable.
+
+## Match 4 specification
+
+### Official for Match 4 (read on pages I opened)
+- Title "Intelligent Web Information Retrieval", live, 1,800 points; task: "Build an AI agent that can navigate websites, understand a natural-language request" and retrieve the specific information a user needs. Prizes as in section 3. Source: MAIN.
+- The Match 4 "View match details" link points back to MAIN. No detail page, brief, starter kit, input/output format, base image, limits, network rule or scoring is published for Match 4. Source: MAIN (and the third-party statement below).
+- LIVE: "Graded by AMD's evaluator. Scores update as new images are graded." (the "images" wording is from MC2/MC3). Source: LIVE.
+- The page does not say which rubric applies. MAIN states no judging criteria for any Match. The generic lablab business rubric (Presentation, Business value, Application of technology, Originality) says events "can set their own criteria" and the event page "says which apply" (RULES, https://lablab.ai/hackathon-rules); MAIN does not say so, so nothing I opened indicates the business rubric applies to Match 4. LIVE indicates an AMD evaluator grades Matches. Conclusion: an AMD evaluator is the indicated grader; its Match 4 contract is not public.
+
+### Inferred from Match 3 (UNVERIFIED for Match 4)
+- Match 3 is a container answering questions, with a starter kit at https://storage.googleapis.com/lablab-static-eu/share/mc3-starter-kit.zip (existence stated on MAIN; I did not download it).
+- Match 3 brief is a Google Drive PDF titled "AMD AI League — Match 3 Challenge Brief" (https://drive.google.com/file/d/1zuySMdTFDvZNPmuIlnbX_rI9MXYqFhCt/view). The viewer page showed only the title. I also fetched the download link; it returned a compressed PDF that my tool could not decode (it was saved outside the repo, not opened further). The Match 1 and 2 brief is titled "AMD AI League — Match 1 & 2 Challenge Brief" (https://drive.google.com/file/d/117-uYCY_a82djUHCgzk7m6LkZI_NtHDD/view), also not readable. So the evaluator contract pattern from the organizer's own documents is NOT confirmed by me.
+- Third-party statements about the MC2/MC3 pattern (unofficial): shared base image "rocm/pytorch rocm10.0 / Ubuntu 26.04 / Python 3.14 / PyTorch 2.13" (Aperture page, ChronosGraph page); no server or port, one exec per question; MC2 entrypoint `python3 /app/app.py --input-image <path>` writing `/app/output/<name>_output.json` (ChronosGraph page); same size/VRAM rules for MC2 and MC3 (Rafa repo). One search summary named a different ROCm 6.2 base from another project, so the base tag is not settled.
+- Third-party statements that the Match 4 spec is not out: Rafa repo ("does not currently expose a usable Match 4 starter-kit/detail destination"); Source Trail ("Match 4's request/output interface and evaluator remain unavailable"; "The Match 4 detail link still opens the overview, and the visible starter kit is labeled Match 3"); Tega repo ("AMD/lablab had not published the Match 4 I/O spec (CLI, JSON keys, base image, limits)" as of 25 Oct 2026). These are dated before 2026-11-03, so a later release is possible.
+
+### Starter kit probe
+- I had no tool able to issue a HEAD request in this session, so I did NOT probe mc4-starter-kit.zip or similar names. Nothing was downloaded into the repo. Existence of a Match 4 kit: UNVERIFIED. Suggested probe for whoever has a shell: HEAD https://storage.googleapis.com/lablab-static-eu/share/mc4-starter-kit.zip (and variants), and if one exists, download into a new empty directory outside the repo and only read it.
+- AMD article (https://www.amd.com/en/developer/resources/technical-articles/2026/build-across-the-ai-stack--join-the-amd-x-lablab-ai-hackathon-.html) fetched once more this session and timed out again: not read.
+- Not opened: lablab blog and help-center pages (https://lablab.ai/help-center); the search I ran returned nothing Match-4-specific from them.
+
+### Unknown
+Input format and invocation, output schema and path, answer-matching rules, base image tag, image-size/VRAM/time limits, network access at grading time, whether external APIs are allowed, how and where the image is submitted, test-set composition, scoring formula, Match 4 close time.
+
+### Best evidence for the evaluator contract
+Weak and indirect: (1) LIVE says AMD's evaluator grades; (2) MC2/MC3 were container tasks with a ROCm base image, one CLI call per input and a JSON file output (third-party descriptions); (3) participant entries converge on query ID + question + optional URL in, `{answer, source(s)}` JSON out, empty answer when unsupported (all self-declared guesses); (4) WebScout says answers are normalised for the grader's comparison. Design for an exact-value answer with source URL and an abstention path, keep the contract adapter thin and re-read MAIN and LIVE for a Match 4 kit before submitting.
+
+## Official evaluator contract evidence: Match 3 starter kit (director, 2026-11-03)
+
+Source: https://storage.googleapis.com/lablab-static-eu/share/mc3-starter-kit.zip (official kit linked from MAIN; downloaded and read, nothing executed). This is the Match 3 contract, NOT a Match 4 spec. Its CONTRACT.md says the container rules "are the same for every challenge in this programme" and are set out in Section 2 of a document titled "All About the Challenges" (not read). That sentence is the basis for expecting these rules on Match 4. Anything Match-4-specific, such as how web pages are reached with no outbound network, remains UNVERIFIED.
+
+Programme-wide per the kit:
+- Submission is a Docker image, run on an AMD GPU. "No service, no port, no entrypoint script"; CMD is `sleep infinity` and the harness execs into it.
+- Mandated base, checked by layer identity: `rocm/pytorch:rocm10.0_ubuntu26.04_py3.14_pytorch_release_2.13.0` (about 29.2 GiB). Same image as the development session. Supports gfx942 (MI300X) and gfx1100 (Navi 31).
+- No outbound network during grading. Weights ship in the image. Test with `docker run --network none`.
+- Image at most 60 GiB uncompressed. VRAM 1 to 48 GiB, sampled; under 1 GiB counts as CPU and is rejected; a dummy buffer is detected.
+- Scores zero: wrong base, over size, over a time budget, output in the wrong place, no GPU, downloading at evaluation.
+
+Match 3 only (shape may differ on Match 4):
+- Budgets: startup 10 min, 30 s per question, 10 min whole run. Ten questions, 20 points each, no partial credit.
+- `python3 /app/app.py --index /app/corpus`, then one new process per question: `python3 /app/app.py --corpus /app/corpus --query-id query_01 --query "..."`. Output `/app/output/query_01_output.json` = `{"answer","citations","confidence"}`. `answer` is the value only. `citations` graded as an exact set: cite only what is necessary. Refusal is empty answer and empty citations. Missing fields score zero.
+- A `selfcheck.py` runs the harness's checks against a built image.
+
+Consequences for the existing build: the FastAPI `/ask` server shape, the keyword backend, and the Dockerfile's default base tag do not match this contract. mc4-starter-kit.zip and four similar names returned 404 on HEAD, so no Match 4 kit was found at the obvious URLs.

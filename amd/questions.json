@@ -1,0 +1,14 @@
+[
+  {
+    "question": "What does the key word MUST NOT mean?",
+    "start_url": "https://www.rfc-editor.org/rfc/rfc2119.html"
+  },
+  {
+    "question": "In what year was Python first released?",
+    "start_url": "https://en.wikipedia.org/wiki/Python_(programming_language)"
+  },
+  {
+    "question": "What is the capital of Australia?",
+    "start_url": "https://en.wikipedia.org/wiki/Australia"
+  }
+]

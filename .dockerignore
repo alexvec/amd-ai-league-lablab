@@ -1,0 +1,10 @@
+# Allowlist: only what the image needs enters the build context.
+*
+!trailmark
+!trailmark/**
+!traces
+!traces/**
+!requirements.txt
+!docker
+!docker/**
+**/__pycache__

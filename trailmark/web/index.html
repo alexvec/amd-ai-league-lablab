@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trailmark: answers with checked quotes</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<main>
+  <header class="top">
+    <h1>Trailmark</h1>
+    <p class="lede">Ask for one fact from the web. Every claim in the answer carries a quote, and a plain program checks that the quote is on the page that was fetched.</p>
+    <dl class="status" id="status" aria-live="polite">
+      <div><dt>Active backend</dt><dd id="health-backend">loading</dd></div>
+      <div><dt>Model</dt><dd id="health-model">loading</dd></div>
+      <div><dt>Deployment</dt><dd id="health-deployment">loading</dd></div>
+    </dl>
+    <p class="amd" id="health-amd"></p>
+    <p class="note" id="backend-note" hidden></p>
+  </header>
+
+  <form id="ask-form" class="card">
+    <label for="question">Question</label>
+    <input id="question" name="question" required minlength="3" maxlength="500" autocomplete="off" placeholder="What are you trying to find?">
+    <label for="start-url">Start URL <span class="hint">(optional; without one, the agent searches English Wikipedia)</span></label>
+    <input id="start-url" name="start_url" type="url" maxlength="2048" autocomplete="off" placeholder="https://">
+    <label class="check"><input id="inject" type="checkbox"> Failure demo: deliberately alter one quote before it reaches the verifier</label>
+    <div class="actions">
+      <button id="ask" type="submit">Find it</button>
+      <button id="example" type="button" class="quiet">Fill in an example</button>
+    </div>
+  </form>
+
+  <section class="card replay-card">
+    <label for="trace-select">Or replay a recorded run</label>
+    <div class="actions">
+      <select id="trace-select"></select>
+      <button id="replay" type="button" class="quiet">Replay</button>
+    </div>
+  </section>
+
+  <p id="busy" class="note" hidden>Working. Fetching live pages can take up to 25 seconds.</p>
+  <p id="error" class="error" role="alert" hidden></p>
+
+  <section id="result" hidden>
+    <p id="replay-notice" class="replay-notice" hidden></p>
+    <div class="card">
+      <h2>Answer</h2>
+      <p id="answer" class="answer"></p>
+      <ul id="notes" class="notes"></ul>
+      <p class="meta">Answer produced by backend <strong id="result-backend"></strong>, model <span id="result-model"></span>, GPU <span id="result-gpu"></span>.</p>
+    </div>
+    <div class="card">
+      <h2>Claims</h2>
+      <ol id="claims" class="claims"></ol>
+    </div>
+    <div class="card">
+      <h2>Stored page</h2>
+      <p class="meta" id="page-meta"></p>
+      <div id="page" class="page" tabindex="0"></div>
+    </div>
+    <div class="card">
+      <h2>Trace</h2>
+      <p class="meta" id="trace-meta"></p>
+      <ol id="steps" class="steps"></ol>
+    </div>
+  </section>
+</main>
+<script src="/static/app.js"></script>
+</body>
+</html>

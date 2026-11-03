@@ -1,0 +1,15 @@
+node_modules/
+.env
+.env.*
+.vercel/
+.claude-session.json
+dist/
+.DS_Store
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+test-results/
+amd/logs/
+.amd-store/
+demo-recordings/

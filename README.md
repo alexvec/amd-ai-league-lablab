@@ -72,7 +72,7 @@ The field names live in `trailmark/api_schema.json`, so they can change without 
 .venv/bin/python -m pytest
 ```
 
-The suite runs offline against fakes, a local socket server and a stub model. Its last run on the build machine gave 183 passed.
+The suite runs offline against fakes, a local socket server and a stub model. Its last run on the build machine gave 184 passed.
 
 `scripts/walk_demo.py` walks [docs/demo-path.md](docs/demo-path.md) in a real browser. Install Chromium once with `.venv/bin/playwright install chromium`.
 

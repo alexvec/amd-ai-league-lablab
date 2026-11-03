@@ -63,8 +63,24 @@ def _looks_numeric(host: str) -> bool:
     return bool(re.fullmatch(r"(0x[0-9a-f]*|[0-9]+)", last))
 
 
-def check_url(url: str) -> CheckedURL:
-    """Validate scheme, host form and port. Raises BlockedURL. Does no network I/O."""
+def origin_of(url: str) -> tuple[str, str, int]:
+    """(scheme, lower-case host, port) of a configured URL, for the allowed_origins set."""
+    parts = urlsplit(url.strip())
+    scheme = parts.scheme.lower()
+    if scheme not in ALLOWED_SCHEMES or not parts.hostname:
+        raise BlockedURL(f"not an http(s) origin: {url}")
+    return scheme, parts.hostname.rstrip(".").lower(), parts.port or ALLOWED_SCHEMES[scheme]
+
+
+def check_url(url: str, allowed_origins=frozenset()) -> CheckedURL:
+    """Validate scheme, host form and port. Raises BlockedURL. Does no network I/O.
+
+    allowed_origins holds (scheme, host, port) values taken only from the operator's contract
+    config, never from a page or a question. An exact match may use a private address or a
+    non-standard port, as a configured mirror host or internal proxy has to. Nothing else changes:
+    the scheme, credential and control-character checks still apply, and any other host gets the
+    full policy, including a redirect from an allowed origin to somewhere else.
+    """
     if not isinstance(url, str) or not url.strip():
         raise BlockedURL("empty URL")
     url = url.strip()
@@ -86,7 +102,8 @@ def check_url(url: str) -> CheckedURL:
     if not host:
         raise BlockedURL("URL has no host")
     port = raw_port or ALLOWED_SCHEMES[scheme]
-    if port not in ALLOWED_PORTS:
+    trusted = (scheme, host, port) in allowed_origins
+    if port not in ALLOWED_PORTS and not trusted:
         raise BlockedURL(f"port not allowed: {port}")
 
     literal = None
@@ -95,19 +112,20 @@ def check_url(url: str) -> CheckedURL:
     except ValueError:
         pass
     if literal is not None:
-        if not is_public_ip(host):
+        if not trusted and not is_public_ip(host):
             raise BlockedURL(f"address not allowed: {host}")
     else:
         try:
             host = host.encode("idna").decode("ascii")
         except UnicodeError as exc:
             raise BlockedURL("invalid host name") from exc
-        if host == "localhost" or host.endswith(BLOCKED_SUFFIXES):
-            raise BlockedURL(f"host not allowed: {host}")
-        if "." not in host:
-            raise BlockedURL(f"single-label host not allowed: {host}")
-        if _looks_numeric(host):
-            raise BlockedURL(f"numeric host form not allowed: {host}")
+        if not trusted:
+            if host == "localhost" or host.endswith(BLOCKED_SUFFIXES):
+                raise BlockedURL(f"host not allowed: {host}")
+            if "." not in host:
+                raise BlockedURL(f"single-label host not allowed: {host}")
+            if _looks_numeric(host):
+                raise BlockedURL(f"numeric host form not allowed: {host}")
 
     path = quote(parts.path or "/", safe="/%:@!$&'()*+,;=~-._")
     query = quote(parts.query, safe="/%:@!$&'()*+,;=~-._?")
@@ -123,8 +141,11 @@ def system_resolver(host: str, port: int) -> list[str]:
     return list(dict.fromkeys(info[4][0] for info in infos))
 
 
-def resolve_public(host: str, port: int, resolver=system_resolver) -> list[str]:
-    """Resolve host. Refuses if any answer is non-public, since a mixed answer is suspect."""
+def resolve_public(host: str, port: int, resolver=system_resolver, trusted: bool = False) -> list[str]:
+    """Resolve host. Refuses if any answer is non-public, since a mixed answer is suspect.
+
+    trusted is only true for an origin the operator configured (see check_url).
+    """
     try:
         addresses = resolver(host, port)
     except OSError as exc:
@@ -132,6 +153,6 @@ def resolve_public(host: str, port: int, resolver=system_resolver) -> list[str]:
     if not addresses:
         raise BlockedURL(f"no addresses for {host}")
     for address in addresses:
-        if not is_public_ip(address):
+        if not trusted and not is_public_ip(address):
             raise BlockedURL(f"{host} resolves to a disallowed address: {address}")
     return addresses

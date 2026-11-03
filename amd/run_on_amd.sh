@@ -1,128 +1,124 @@
 #!/usr/bin/env bash
-# First real AMD run. Alex launches this from a terminal in a notebooks.amd.com/hackathon session:
+# First real GPU run. A person, or a later agent with an AMD session, starts this from a terminal in
+# a notebooks.amd.com/hackathon session:
 #
 #   git clone https://github.com/alexvec/amd-ai-league-lablab && cd amd-ai-league-lablab
-#   bash amd/run_on_amd.sh --probe-only     # seconds: records the GPU string, installs nothing
-#   bash amd/run_on_amd.sh                  # short job: one question, small model, time budget
+#   bash amd/run_on_amd.sh --probe-only     # seconds: records the GPU and torch state, installs nothing
+#   bash amd/run_on_amd.sh                  # installs deps, gets weights, runs the fixture self-check on the GPU
 #
-# It reads the GPU string from the machine and writes it to amd/first-run/gpu-probe.json. The full
-# run then starts an OpenAI-compatible model server on ROCm, runs the agent on one live question,
-# and writes a trace with measured values to traces/. It stops if no AMD GPU is reported, stops at
-# RUN_BUDGET_SECONDS, and pushes nothing.
+# UNTESTED ON AMD. This has never run on an AMD machine. Exercised on a Mac: the refusal with no GPU,
+# and --probe-only with a fake rocminfo and a stub torch, manifest included. Everything after the probe
+# has never run.
+# It stops at RUN_BUDGET_SECONDS, pushes nothing, and leaves evidence files as produced.
 #
-# UNTESTED ON AMD: this has never run on an AMD machine. Run for real here: the refusal with no GPU
-# and --probe-only with a fake rocminfo. The flow after that has only been run with a fake rocminfo
-# and a stub model server, never with vLLM or a GPU. Unverified: which GPU the notebook has, whether
-# it allows vLLM installs, whether it can reach public websites, and whether the default model fits.
-# See amd/README.md.
-#
-# Overrides:
-#   MODEL=<hf id>             model to serve (default below; fit in GPU memory unverified)
-#   MODEL_SERVER_CMD="..."    your own server command; must listen on 127.0.0.1:$PORT
-#   QUESTIONS=amd/questions.json   the longer set, after the first run has worked
-#   RUN_BUDGET_SECONDS, SERVER_WAIT_SECONDS, PORT, MAX_MODEL_LEN, GPU_MEMORY_UTILIZATION, REQUEST_SECONDS
+# Overrides: PYTHON, STORE, MODEL_DIR, RUN_BUDGET_SECONDS, MIN_FREE_GIB
 set -euo pipefail
 
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
-MODEL="${MODEL:-Qwen/Qwen2.5-1.5B-Instruct}"
-PORT="${PORT:-8001}"
-MAX_MODEL_LEN="${MAX_MODEL_LEN:-8192}"
-GPU_MEMORY_UTILIZATION="${GPU_MEMORY_UTILIZATION:-0.85}"
-REQUEST_SECONDS="${REQUEST_SECONDS:-300}"
-QUESTIONS="${QUESTIONS:-amd/first-question.json}"
-RUN_BUDGET_SECONDS="${RUN_BUDGET_SECONDS:-2400}"
-SERVER_WAIT_SECONDS="${SERVER_WAIT_SECONDS:-900}"
 PYTHON="${PYTHON:-python3}"
-PROBE_FILE="amd/first-run/gpu-probe.json"
+RUN_BUDGET_SECONDS="${RUN_BUDGET_SECONDS:-3000}"
+MIN_FREE_GIB="${MIN_FREE_GIB:-12}"
+COMMIT="$(git rev-parse --short HEAD 2>/dev/null || echo nogit)"
+RUN_ID="$(date -u +%Y%m%dT%H%M%SZ)-$COMMIT"
+EVIDENCE="amd/evidence/$RUN_ID"
+PROBE_TMP="$(mktemp -d)"
+BUDGET_PID=""
+# However this ends (probe, failed install, time budget), a folder that exists gets its manifest,
+# so a partial run can be committed unedited too.
+finish() {
+  [[ -n "$BUDGET_PID" ]] && kill "$BUDGET_PID" 2>/dev/null || true
+  rm -rf "$PROBE_TMP"
+  if [[ -d "$EVIDENCE" ]]; then "$PYTHON" amd/write_manifest.py "$EVIDENCE" || true; fi
+}
+trap finish EXIT
+trap 'exit 143' TERM
 
-echo "== 1/5 Reading the GPU string from this machine"
-if ! "$PYTHON" -m trailmark.gpu --require --write "$PROBE_FILE"; then
+echo "== 1/5 Probe: what this machine reports"
+if ! "$PYTHON" -m trailmark.gpu --require --write "$PROBE_TMP/gpu-probe.json"; then
   cat >&2 <<'MSG'
-No AMD GPU was reported by rocminfo, amd-smi or rocm-smi. Stopping, because a trace written
-here could not honestly be called an AMD run.
+No AMD GPU was reported by rocminfo, amd-smi or rocm-smi. Stopping, and writing no evidence, because
+nothing run here could honestly be called an AMD run.
 MSG
   exit 3
 fi
-echo "Recorded in $PROBE_FILE"
+set +e
+"$PYTHON" - >"$PROBE_TMP/torch-probe.json" <<'PY'
+import json, sys
+try:
+    import torch
+except ImportError as exc:
+    print(json.dumps({"torch": None, "error": str(exc)}))
+    sys.exit(4)
+hip = getattr(torch.version, "hip", None)
+available = bool(torch.cuda.is_available())
+print(json.dumps({"torch": str(torch.__version__), "hip": None if hip is None else str(hip), "cuda_available": available, "device": torch.cuda.get_device_name(0) if available else None}))
+sys.exit(0 if available and hip is not None else 4)
+PY
+TORCH_STATUS=$?
+set -e
+cat "$PROBE_TMP/torch-probe.json"
+mkdir -p "$EVIDENCE"
+cp "$PROBE_TMP/gpu-probe.json" "$PROBE_TMP/torch-probe.json" "$EVIDENCE/"
+"$PYTHON" --version >"$EVIDENCE/python-version.txt" 2>&1
+df -h . >"$EVIDENCE/df.txt" 2>&1 || true
+echo "Recorded in $EVIDENCE"
+if [[ "$TORCH_STATUS" -ne 0 ]]; then
+  echo "torch cannot reach a ROCm GPU here (see above). The rocm backend will refuse to run." >&2
+  echo "Commit $EVIDENCE as it is: it records what this machine reported." >&2
+  exit 4
+fi
 if [[ "${1:-}" == "--probe-only" ]]; then
-  cat <<'MSG'
-Probe done, nothing installed. Read the file above, then run this script again without
---probe-only for the short model run, or use "Turn-off Session". Idle time counts against the quota.
-MSG
+  echo "Probe done, nothing installed. $EVIDENCE is a probe and does not count as a run. Commit it unedited."
+  echo "Run this script again without --probe-only, or turn the session off: idle time counts against the quota."
   exit 0
 fi
 
-# The whole job has a budget, so a stuck install or server cannot eat the 3 h/day quota.
-( sleep "$RUN_BUDGET_SECONDS"; echo "Time budget of $RUN_BUDGET_SECONDS s reached. Stopping." >&2; kill -TERM $$ ) &
-BUDGET_PID=$!
-SERVER_PID=""
-trap 'kill "$BUDGET_PID" 2>/dev/null || true; [[ -n "$SERVER_PID" ]] && kill "$SERVER_PID" 2>/dev/null || true' EXIT
-
-# Notebook storage per docs/competition.md section 9: /persistent or /workspace, about 25 GB.
-STORE=""
-for candidate in /persistent /workspace; do
-  if [[ -d "$candidate" && -w "$candidate" ]]; then STORE="$candidate/trailmark"; break; fi
-done
+# Notebook storage per docs/competition.md: /persistent or /workspace, about 25 GB.
+if [[ -z "${STORE:-}" ]]; then
+  for candidate in /persistent /workspace; do
+    if [[ -d "$candidate" && -w "$candidate" ]]; then STORE="$candidate/trailmark"; break; fi
+  done
+fi
 STORE="${STORE:-$PWD/.amd-store}"
+MODEL_DIR="${MODEL_DIR:-$STORE/models/qwen3-4b}"
 mkdir -p "$STORE" amd/logs
-export HF_HOME="${HF_HOME:-$STORE/hf}"
-LOG="amd/logs/model-server-$(date -u +%Y%m%dT%H%M%SZ).log"
-echo "Storage: $STORE  Model cache: $HF_HOME  Server log: $LOG"
-
-echo "== 2/5 Preparing the model server"
-if [[ -n "${MODEL_SERVER_CMD:-}" ]]; then
-  SERVER=(bash -c "$MODEL_SERVER_CMD")
-else
-  VLLM_BIN="$(command -v vllm || true)"
-  if [[ -z "$VLLM_BIN" ]]; then
-    # Command from the vLLM install docs, read 2026-11-03: ROCm wheels are Python 3.12 only, and other
-    # versions can silently fall back to the CUDA wheel. https://docs.vllm.ai/en/latest/getting_started/installation/gpu.html
-    # AMD's docs give a different path for ROCm 10.1 (Python 3.14, per GPU target):
-    # https://rocm.docs.amd.com/projects/ai-ecosystem/en/latest/inference/vllm.html
-    # If this fails, follow AMD's page and rerun with MODEL_SERVER_CMD set.
-    command -v uv >/dev/null || "$PYTHON" -m pip install --user uv
-    export PATH="$HOME/.local/bin:$PATH"
-    uv venv --python 3.12 --seed "$STORE/vllm-venv"
-    uv pip install --python "$STORE/vllm-venv/bin/python" vllm --extra-index-url https://wheels.vllm.ai/rocm/ --upgrade
-    VLLM_BIN="$STORE/vllm-venv/bin/vllm"
-  fi
-  SERVER=("$VLLM_BIN" serve "$MODEL" --host 127.0.0.1 --port "$PORT" --max-model-len "$MAX_MODEL_LEN" --gpu-memory-utilization "$GPU_MEMORY_UTILIZATION")
+FREE_GIB="$(df -Pk "$STORE" | awk 'NR==2 {print int($4/1048576)}')"
+if [[ ! -f "$MODEL_DIR/config.json" && "$FREE_GIB" -lt "$MIN_FREE_GIB" ]]; then
+  echo "Only $FREE_GIB GiB free at $STORE, and the weights need about 8 GB plus room. Stopping." >&2
+  exit 5
 fi
 
-echo "== 3/5 Starting the model server on 127.0.0.1:$PORT"
-"${SERVER[@]}" >"$LOG" 2>&1 &
-SERVER_PID=$!
-WAITED=0
-while (( WAITED < SERVER_WAIT_SECONDS )); do
-  if curl -fs "http://127.0.0.1:$PORT/v1/models" >/dev/null 2>&1; then READY=1; break; fi
-  if ! kill -0 "$SERVER_PID" 2>/dev/null; then
-    echo "The model server exited. Last lines of $LOG:" >&2
-    tail -n 30 "$LOG" >&2
-    exit 4
-  fi
-  sleep 5
-  WAITED=$((WAITED + 5))
-done
-if [[ -z "${READY:-}" ]]; then
-  echo "The model server was not ready after $SERVER_WAIT_SECONDS s. See $LOG" >&2
-  exit 4
+# The whole job has a budget, so a stuck install cannot eat the 3 h/day quota.
+# The trap on TERM waits for the foreground command, so the children are stopped too.
+( sleep "$RUN_BUDGET_SECONDS"; echo "Time budget of $RUN_BUDGET_SECONDS s reached. Stopping." >&2; kill -TERM $$; pkill -TERM -P $$ ) &
+BUDGET_PID=$!
+
+echo "== 2/5 Installing dependencies on this Python"
+"$PYTHON" -m pip install --user -r app/requirements.txt 2>&1 | tee "$EVIDENCE/pip-install.log"
+"$PYTHON" -m pip freeze >"$EVIDENCE/pip-freeze.txt"
+
+echo "== 3/5 Getting weights (skipped if present): $MODEL_DIR"
+if [[ ! -f "$MODEL_DIR/config.json" ]]; then
+  "$PYTHON" tools/fetch_weights.py "$MODEL_DIR" 2>&1 | tee "$EVIDENCE/fetch-weights.log"
 fi
-SERVED_ID="$(curl -fs "http://127.0.0.1:$PORT/v1/models" | "$PYTHON" -c 'import json,sys; print(json.load(sys.stdin)["data"][0]["id"])')"
-echo "Serving: $SERVED_ID"
+if [[ -f "$MODEL_DIR/SOURCE.json" ]]; then cp "$MODEL_DIR/SOURCE.json" "$EVIDENCE/model-source.json"; fi
 
-echo "== 4/5 Running the agent on live pages"
-export TRAILMARK_BACKEND=llm TRAILMARK_LLM_BASE_URL="http://127.0.0.1:$PORT/v1" TRAILMARK_LLM_MODEL="$SERVED_ID"
-# record.py refuses unless the backend label resolves to rocm-*, which needs the GPU reported here
-# and a model server on this machine. Each trace stores the GPU string, tokens and wall time as measured.
-"$PYTHON" -m trailmark.record --questions "$QUESTIONS" --require-amd --request-seconds "$REQUEST_SECONDS"
+echo "== 4/5 Self-check on the GPU with the real model. Failures here are results: they get committed too."
+set +e
+"$PYTHON" tools/selfcheck_m4.py --local --backend rocm --model-dir "$MODEL_DIR" --evidence-dir "$EVIDENCE"
+CHECK_STATUS=$?
+set -e
 
-echo "== 5/5 Done. Read these before committing:"
-git status --short traces/ "$PROBE_FILE" 2>/dev/null || true
-cat <<'MSG'
+echo "== 5/5 Done. The manifest is written on exit."
+cat <<MSG
 
-  git add amd/first-run/gpu-probe.json traces/
-  git -c user.name="Alex Veciana Belmonte" -c user.email="38962279+alexvec@users.noreply.github.com" commit -m "Add first AMD run"
-  git push
+Self-check exit status: $CHECK_STATUS. Read $EVIDENCE/summary.json and $EVIDENCE/selfcheck.log.
+Commit the folder as it is, whatever it says. Do not edit, trim or rerun over it:
 
-Then turn off the session with "Turn-off Session". Idle time counts against the 3 h/day quota.
+  git add $EVIDENCE
+  git -c user.name="Alex Veciana Belmonte" -c user.email="38962279+alexvec@users.noreply.github.com" commit -m "Add GPU run $RUN_ID, unedited"
+  git push origin main
+
+Then turn the session off, and run: vercel --prod
 MSG
+exit "$CHECK_STATUS"

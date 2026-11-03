@@ -1,0 +1,67 @@
+# Every Match-4-specific fact lives here. Defaults are the Match 3 kit's values and are UNVERIFIED
+# for Match 4: no Match 4 spec has been read. When the real spec is available, edit this file and
+# fixtures/questions.json, rerun tools/selfcheck_m4.py, and leave the core modules alone.
+# See docs/prds/match-4.md section 6.
+
+[cli]
+index_flag = "--index"
+corpus_flag = "--corpus"
+query_id_flag = "--query-id"
+query_flag = "--query"
+start_url_flag = "--start-url"     # ASSUMPTION, per the PRD. Optional on every call.
+
+[output]
+dir = "/app/output"
+filename = "{query_id}_output.json"
+cite_form = "auto"                 # auto: path for mirror, url for proxy. Or set "path" or "url".
+strip_units = true                 # 94 C is written as 94. The kit says graders normalise units away.
+
+[output.keys]
+answer = "answer"
+citations = "citations"
+confidence = "confidence"
+
+[pages]
+mode = "mirror"                    # mirror | proxy | live. live is proxy mode with no proxy set.
+root = ""                          # mirror root. Empty means the path given to --index.
+mirror_base_url = ""               # if set, absolute links under this URL map into the mirror.
+proxy = ""                         # forward proxy, e.g. http://proxy.internal:3128
+allowed_hosts = []                 # origins that may be private or on any port, e.g. ["http://pages.internal:8080"]
+seeds = []                         # URLs where proxy or live mode starts walking at --index
+max_index_pages = 2000
+max_bytes = 2000000
+max_text_chars = 400000
+fetch_timeout_s = 10.0
+per_host_delay_s = 0.4
+index_walk_share = 0.6             # share of the startup budget the proxy walk may use
+
+[time]
+startup_s = 600
+query_s = 30
+run_s = 600
+margin_s = 4.0                     # a query refuses this long before query_s, so the file is on disk in time
+
+[budget]
+pages = 4                          # TARGET from the PRD, not measured. Pages opened per question.
+first_round_pages = 3
+hops = 2                           # further read rounds after the first
+plan_step = true
+retries = 1                        # one more read if the model's reply is not parseable JSON
+read_chars = 12000                 # untrusted page text shown to the model per read
+plan_tokens = 64
+read_tokens = 400
+refuse_on_unreadable_overlap = 2   # refuse if an unreadable page's path shares this many question terms
+
+[paths]
+index_dir = "/app/index"
+run_dir = "/app/run"
+
+[service]
+backend = "rocm"                   # the only backend the image runs. fake needs MC4_ALLOW_FAKE=1, which the image never sets.
+model_dir = "/models/qwen3-4b"
+model_name = "Qwen/Qwen3-4B-Instruct-2507"
+socket_name = "model.sock"
+connect_wait_s = 2.0
+ready_wait_s = 560
+respawn_on_missing = false         # leave false unless a measured load time fits in query_s
+warmup_tokens = 16

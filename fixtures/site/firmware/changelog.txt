@@ -1,0 +1,5 @@
+Kestrel firmware defaults, excerpt from the changelog
+
+# DEFAULT_SYNC_TIMEOUT_S was 60 before firmware 5.0
+DEFAULT_SYNC_TIMEOUT_S = 180
+DEFAULT_RETRY_COUNT = 3

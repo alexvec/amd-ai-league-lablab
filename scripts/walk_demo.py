@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Walks docs/demo-path.md in a real browser and fails if any step does not hold.
+"""Walks part A of docs/demo-path.md in a real browser and fails if any step does not hold.
 
 .venv/bin/python scripts/walk_demo.py --url https://amd-ai-league-lablab.vercel.app
 Add --headed --slow-mo 600 --video-dir demo-recordings to record it.
@@ -14,9 +14,6 @@ import urllib.request
 
 from playwright.sync_api import expect, sync_playwright
 
-QUESTION_TIMEOUT = 45_000
-METADATA_URL = "http://169.254.169.254/latest/meta-data/"
-
 
 def step(number: int, text: str) -> None:
     print(f"step {number} ok: {text}", flush=True)
@@ -24,51 +21,31 @@ def step(number: int, text: str) -> None:
 
 def walk(page, base_url: str, health: dict) -> None:
     page.goto(base_url)
-    expect(page.locator("#health-backend")).to_have_text(health["backend"])
-    expect(page.locator("#health-deployment")).to_have_text(health["deployment"])
-    expect(page.locator("#health-amd")).to_have_text(health["amd"]["statement"])
-    step(1, f"header shows backend {health['backend']} and deployment {health['deployment']} from /health")
+    statement = page.locator("#amd-statement")
+    expect(statement).to_have_text(health["amd"]["statement"])
+    step(1, f"statement matches /health: {health['amd']['statement']!r}")
 
-    page.click("#example")
-    page.click("#ask")
-    expect(page.locator("#result")).to_be_visible(timeout=QUESTION_TIMEOUT)
-    expect(page.locator("#result-backend")).to_have_text(health["backend"])
-    expect(page.locator("#answer")).not_to_have_class("answer empty")
-    verified = page.locator("#claims li.claim.ok")
-    expect(verified.first).to_be_visible()
-    mark = page.locator("#page mark")
-    expect(mark).to_be_visible()
-    expect(page.locator("#steps li.step-fetch").first).to_be_visible()
-    expect(page.locator("#steps li.step-verify").first).to_be_visible()
-    step(2, f"{verified.count()} verified claims, quote highlighted: {mark.inner_text()[:70]!r}")
+    expect(page.locator("form, input, textarea, button")).to_have_count(0)
+    expect(page.locator("#page-scope")).to_contain_text("runs no model and serves no answers")
+    step(2, "no form or input; the page says it serves no answers")
 
-    page.check("#inject")
-    page.click("#ask")
-    bad = page.locator("#claims li.claim.bad")
-    expect(bad).to_have_count(1, timeout=QUESTION_TIMEOUT)
-    expect(bad.locator(".badge.demo")).to_be_visible()
-    altered = bad.locator(".claim-text").inner_text()
-    answer = page.locator("#answer").inner_text()
-    if altered in answer:
-        raise AssertionError("the altered claim reached the answer")
-    step(3, f"altered quote flagged and absent from the answer: {altered[:70]!r}")
-    page.uncheck("#inject")
+    expect(page.locator("#build-state li")).to_have_count(4)
+    expect(page.locator("#build-state")).to_contain_text("scripted stub")
+    expect(page.locator("#build-state")).to_contain_text("never run")
+    expect(page.locator("#build-state")).to_contain_text("never built")
+    step(3, "the list separates stub-tested, never run and never built")
 
-    page.fill("#start-url", METADATA_URL)
-    page.click("#ask")
-    expect(page.locator("#error")).to_contain_text("URL refused", timeout=QUESTION_TIMEOUT)
-    step(4, f"refused: {page.locator('#error').inner_text()}")
+    if health["backend"] != "none" or health["answers_served"] is not False or health["model"] is not None:
+        raise AssertionError(f"/health claims more than a status page: {health}")
+    page.click("#health-link")
+    expect(page.locator("body")).to_contain_text('"recorded_amd_runs"')
+    step(4, f"/health: backend none, answers_served false, recorded_amd_runs {health['amd']['recorded_amd_runs']}")
+    page.go_back()
 
-    options = page.locator("#trace-select option")
-    if options.count() == 0 or page.locator("#replay").is_disabled():
-        raise AssertionError("no recorded run to replay")
-    page.select_option("#trace-select", index=0)
-    label = options.first.inner_text()
-    page.click("#replay")
-    expect(page.locator("#replay-notice")).to_be_visible(timeout=QUESTION_TIMEOUT)
-    expect(page.locator("#replay-notice")).to_contain_text("Replay of a run recorded")
-    expect(page.locator("#trace-meta")).to_contain_text("Mode replay")
-    step(5, f"replay labelled: {label[:90]!r}; backend in trace {page.locator('#result-backend').inner_text()}")
+    href = page.locator("#repo-link").get_attribute("href")
+    if href != "https://github.com/alexvec/amd-ai-league-lablab":
+        raise AssertionError(f"unexpected repo link: {href}")
+    step(5, f"repo link: {href}")
 
 
 def main() -> int:
@@ -88,17 +65,17 @@ def main() -> int:
             options.update(record_video_dir=args.video_dir, record_video_size={"width": 1280, "height": 900})
         context = browser.new_context(**options)
         page = context.new_page()
-        console_errors = []
-        page.on("pageerror", lambda error: console_errors.append(str(error)))
+        errors = []
+        page.on("pageerror", lambda error: errors.append(str(error)))
         try:
             walk(page, base_url, health)
         finally:
             context.close()
             browser.close()
-    if console_errors:
-        print(f"page errors: {console_errors}", file=sys.stderr)
+    if errors:
+        print(f"page errors: {errors}", file=sys.stderr)
         return 1
-    print(f"demo path walked against {base_url}")
+    print(f"demo path part A walked against {base_url}")
     return 0
 
 

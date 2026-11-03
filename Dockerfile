@@ -1,31 +1,23 @@
-# Artifact shape: agent plus optional local model server, on a ROCm base.
-#
-# The base tag the Match 4 evaluator requires, if any, is UNVERIFIED: no official source states it.
-# Both tags below were confirmed to exist through the Docker Hub tags API on 2026-11-03. Neither has
-# been pulled or built from, so this file has never been built on a ROCm base.
-#   rocm/dev-ubuntu-22.04:7.2.4 (default, compressed size 1.09 GB as reported by Docker Hub)
-#   rocm/vllm:rocm10.1.0_ubuntu24.04_py3.14-pytorch_2.13.0_vllm-0.29.0 (31.3 GB as reported by Docker Hub;
-#     also listed in AMD's vLLM page, and larger than the notebook's roughly 25 GB of storage)
-# To serve a model in the container, pass the second one as --build-arg ROCM_BASE=...
-# Model weights are not included. Serving a model from this image is untested.
-ARG ROCM_BASE=rocm/dev-ubuntu-22.04:7.2.4
-FROM ${ROCM_BASE}
+# The Match 4 image, per the Match 3 kit's programme-wide contract. NOT YET BUILT: the base is about
+# 29.2 GiB, and building needs a machine with Docker and at least 60 GiB free. See amd/README.md.
+FROM rocm/pytorch:rocm10.0_ubuntu26.04_py3.14_pytorch_release_2.13.0
 
-ENV PYTHONUNBUFFERED=1 PIP_NO_CACHE_DIR=1 TRAILMARK_DEPLOYMENT=container
+WORKDIR /app
 
-# ensurepip is the part Debian and Ubuntu leave out of python3 without python3-venv.
-RUN command -v python3 >/dev/null && python3 -c "import ensurepip" >/dev/null 2>&1 \
-    || (apt-get update && apt-get install -y --no-install-recommends python3 python3-venv && rm -rf /var/lib/apt/lists/*)
-RUN python3 -m venv --system-site-packages /opt/trailmark-venv
+# Weights ship in the image: there is no outbound network at grading. Put them in models/qwen3-4b
+# before building, with tools/fetch_weights.py. They count against the 60 GiB uncompressed limit.
+COPY models/ /models/
 
-WORKDIR /opt/trailmark
-COPY requirements.txt ./
-RUN /opt/trailmark-venv/bin/pip install -r requirements.txt uvicorn==0.54.0
-COPY trailmark ./trailmark
-COPY traces ./traces
-COPY docker/start.sh ./start.sh
-RUN chmod +x start.sh
+ENV HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 PYTHONUNBUFFERED=1
 
-EXPOSE 8000
-HEALTHCHECK --interval=30s --timeout=5s --start-period=20s CMD /opt/trailmark-venv/bin/python -c "import urllib.request as u; u.urlopen('http://127.0.0.1:8000/health', timeout=4)"
-ENTRYPOINT ["/opt/trailmark/start.sh"]
+COPY app/requirements.txt /app/requirements.txt
+RUN pip install --no-cache-dir -r /app/requirements.txt
+
+COPY app/ /app/
+COPY trailmark/ /app/trailmark/
+
+RUN mkdir -p /app/corpus /app/output /app/index /app/run
+
+# No service at build time, no port and no entrypoint script. The harness execs into this container.
+# --index starts the resident model service on a unix socket under /app/run.
+CMD ["sleep", "infinity"]

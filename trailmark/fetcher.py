@@ -72,13 +72,37 @@ class _PinnedHTTPS(http.client.HTTPSConnection):
 
 
 def socket_transport(target: CheckedURL, ip: str, limits: Limits, deadline: float, max_bytes: int, accept_types) -> RawResponse:
-    """Connect to the checked address, never to a freshly resolved name.
-
-    The read timeout only bounds one recv, so a server sending one byte at a time could
-    outlast it forever. The watchdog shuts the socket at the deadline to stop that.
-    """
+    """Connect to the checked address, never to a freshly resolved name."""
     cls = _PinnedHTTPS if target.scheme == "https" else _PinnedHTTP
     conn = cls(target.host, target.port, ip, limits.connect_timeout, limits.read_timeout)
+    return _exchange(conn, target.path_query, {}, limits, deadline, max_bytes, accept_types)
+
+
+def forward_proxy_transport(proxy_host: str, proxy_port: int):
+    """A transport that sends every request through a configured forward proxy.
+
+    http targets use an absolute-form GET. https targets use CONNECT, then verify the target's
+    certificate. Name resolution happens at the proxy, so the fetcher's own DNS check cannot run
+    on this path; check_url's host policy still does, and the proxy is the rest of the boundary.
+    The CONNECT branch has not been exercised, because no TLS test server exists in this repo.
+    """
+
+    def transport(target: CheckedURL, _ip: str, limits: Limits, deadline: float, max_bytes: int, accept_types) -> RawResponse:
+        if target.scheme == "https":
+            conn = http.client.HTTPSConnection(proxy_host, proxy_port, timeout=limits.read_timeout, context=ssl.create_default_context())
+            conn.set_tunnel(target.host, target.port)
+            return _exchange(conn, target.path_query, {}, limits, deadline, max_bytes, accept_types)
+        conn = http.client.HTTPConnection(proxy_host, proxy_port, timeout=limits.read_timeout)
+        netloc = target.host if target.port == 80 else f"{target.host}:{target.port}"
+        return _exchange(conn, target.url, {"Host": netloc}, limits, deadline, max_bytes, accept_types)
+
+    return transport
+
+
+def _exchange(conn, request_target: str, extra_headers: dict, limits: Limits, deadline: float, max_bytes: int, accept_types) -> RawResponse:
+    """The read timeout only bounds one recv, so a server sending one byte at a time could
+    outlast it forever. The watchdog shuts the socket at the deadline to stop that.
+    """
     expired = threading.Event()
 
     def expire() -> None:
@@ -96,8 +120,9 @@ def socket_transport(target: CheckedURL, ip: str, limits: Limits, deadline: floa
     try:
         conn.request(
             "GET",
-            target.path_query,
+            request_target,
             headers={
+                **extra_headers,
                 "User-Agent": USER_AGENT,
                 "Accept": "text/html,application/xhtml+xml,text/plain;q=0.9,application/json;q=0.5",
                 "Accept-Encoding": "gzip",
@@ -123,7 +148,7 @@ def socket_transport(target: CheckedURL, ip: str, limits: Limits, deadline: floa
             if total >= max_bytes:
                 truncated = True
                 break
-        return RawResponse(resp.status, headers, b"".join(chunks), truncated)
+        return RawResponse(resp.status, headers, b"".join(chunks)[:max_bytes], truncated)
     except (OSError, http.client.HTTPException):
         if expired.is_set():
             raise FetchError(DEADLINE_MESSAGE) from None
@@ -145,19 +170,21 @@ def _decode_body(raw: RawResponse, max_bytes: int) -> tuple[bytes, bool]:
     return data, raw.truncated or bool(engine.unconsumed_tail)
 
 
-def _redirect_target(base: str, location: str) -> CheckedURL:
+def _redirect_target(base: str, location: str, allowed_origins=frozenset()) -> CheckedURL:
     try:
         joined = urljoin(base, location)
     except ValueError as exc:
         raise BlockedURL(f"unparseable redirect target: {exc}") from exc
-    return check_url(joined)
+    return check_url(joined, allowed_origins)
 
 
 class Fetcher:
     """One instance per request: it holds that request's robots cache and politeness clock."""
 
-    def __init__(self, limits: Limits, resolver=system_resolver, transport=socket_transport, on_event=None, sleep=time.sleep, deadline: float | None = None):
+    def __init__(self, limits: Limits, resolver=system_resolver, transport=socket_transport, on_event=None, sleep=time.sleep, deadline: float | None = None, allowed_origins=frozenset(), proxy_transport=None):
         self.limits = limits
+        self.allowed_origins = frozenset(allowed_origins)
+        self.proxy_transport = proxy_transport
         self.resolver = resolver
         self.transport = transport
         self.on_event = on_event or (lambda **_: None)
@@ -180,14 +207,21 @@ class Fetcher:
                 self.sleep(wait)
         self._last_hit[host] = time.monotonic()
 
+    def _route(self, target: CheckedURL) -> tuple[list[str], object]:
+        """Addresses to try and the transport to use. Configured origins go direct, never via the proxy."""
+        trusted = (target.scheme, target.host, target.port) in self.allowed_origins
+        if self.proxy_transport is not None and not trusted:
+            return ["forward-proxy"], self.proxy_transport
+        return resolve_public(target.host, target.port, self.resolver, trusted=trusted), self.transport
+
     def _one_hop(self, target: CheckedURL, max_bytes: int, accept_types) -> RawResponse:
-        addresses = resolve_public(target.host, target.port, self.resolver)
+        addresses, transport = self._route(target)
         self._polite_wait(target.host)
         last_error: Exception | None = None
         for ip in addresses:
             budget = min(self._remaining(), self.limits.per_fetch_seconds)
             try:
-                return self.transport(target, ip, self.limits, time.monotonic() + budget, max_bytes, accept_types)
+                return transport(target, ip, self.limits, time.monotonic() + budget, max_bytes, accept_types)
             except FetchError:
                 raise
             except (OSError, http.client.HTTPException) as exc:
@@ -198,17 +232,18 @@ class Fetcher:
         origin = f"{target.scheme}://{target.host}:{target.port}"
         if origin in self._robots:
             return self._robots[origin]
-        url = f"{target.scheme}://{target.host}/robots.txt"
-        if ":" in target.host:
-            url = f"{target.scheme}://[{target.host}]/robots.txt"
+        netloc = f"[{target.host}]" if ":" in target.host else target.host
+        if target.port not in (80, 443):
+            netloc += f":{target.port}"
+        url = f"{target.scheme}://{netloc}/robots.txt"
         try:
-            current = check_url(url)
+            current = check_url(url, self.allowed_origins)
             status, body = 0, b""
             for _ in range(self.limits.max_redirects + 1):
                 raw = self._one_hop(current, self.limits.max_robots_bytes, None)
                 status, body = raw.status, _decode_body(raw, self.limits.max_robots_bytes)[0]
                 if raw.status in REDIRECTS and raw.headers.get("location"):
-                    current = _redirect_target(current.url, raw.headers["location"])
+                    current = _redirect_target(current.url, raw.headers["location"], self.allowed_origins)
                     continue
                 break
             policy = robots_mod.from_status(status, body.decode("utf-8", "replace"), ROBOTS_TOKEN)
@@ -222,11 +257,11 @@ class Fetcher:
 
     def fetch(self, url: str, accept_types=TEXT_TYPES) -> FetchResult:
         """GET with the URL policy, DNS check and robots check applied on every hop."""
-        current = check_url(url)
+        current = check_url(url, self.allowed_origins)
         hops: list[str] = []
         for _ in range(self.limits.max_redirects + 1):
             self._remaining()
-            resolve_public(current.host, current.port, self.resolver)
+            self._route(current)
             if not self._robots_for(current).allowed(current.path_query):
                 raise RobotsDenied(f"robots.txt disallows {current.url}")
             raw = self._one_hop(current, self.limits.max_bytes, accept_types)
@@ -235,7 +270,7 @@ class Fetcher:
                 location = raw.headers.get("location")
                 if not location:
                     raise FetchError(f"redirect without a location from {current.url}")
-                current = _redirect_target(current.url, location)
+                current = _redirect_target(current.url, location, self.allowed_origins)
                 continue
             header = raw.headers.get("content-type", "")
             ctype = header.split(";")[0].strip().lower()

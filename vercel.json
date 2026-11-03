@@ -2,8 +2,8 @@
   "framework": "fastapi",
   "functions": {
     "app.py": {
-      "maxDuration": 40,
-      "includeFiles": "{trailmark/**,traces/**}"
+      "maxDuration": 10,
+      "includeFiles": "{trailmark/**,amd/evidence/**}"
     }
   }
 }

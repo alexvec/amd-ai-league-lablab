@@ -1,10 +1,17 @@
-# Allowlist: only what the app needs is uploaded. Everything else stays on this machine.
+# Allowlist: only what the status page needs is uploaded.
 *
 !app.py
 !trailmark
-!trailmark/**
-!traces
-!traces/**
+!trailmark/__init__.py
+!trailmark/config.py
+!trailmark/evidence.py
+!trailmark/gpu.py
+!trailmark/server.py
+!trailmark/web
+!trailmark/web/**
+!amd
+!amd/evidence
+!amd/evidence/**
 !requirements.txt
 !vercel.json
 **/__pycache__

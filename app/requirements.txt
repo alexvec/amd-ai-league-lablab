@@ -1,0 +1,4 @@
+# Installed into the image at build time, when the network is open. The base ships torch and PIL only.
+# transformers >= 4.51 is the bound on the Qwen3 model card. Install on Python 3.14 is UNVERIFIED; the
+# first GPU run records the versions it resolved in pip-freeze.txt, and they get pinned from there.
+transformers>=4.51

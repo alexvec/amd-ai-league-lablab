@@ -41,6 +41,7 @@ class Snapshot:
     fetched_at: str
     truncated: bool = False
     links: list[Link] = field(default_factory=list)
+    chrome: str = ""
 
     def public_dict(self, include_text: bool = True) -> dict:
         data = {
@@ -81,6 +82,7 @@ class _Reader(HTMLParser):
         self.anchor: tuple[str, list[str]] | None = None
         self.links: list[Link] = []
         self.seen: set[str] = set()
+        self.chrome: list[str] = []  # nav, header and similar. Used only to spot a "withdrawn" banner.
 
     def _flush(self) -> None:
         line = re.sub(r"\s+", " ", "".join(self.buffer)).strip()
@@ -157,18 +159,25 @@ class _Reader(HTMLParser):
             self.anchor[1].append(data)
         if not self.stack:
             self.buffer.append(data)
+        elif data.strip():
+            self.chrome.append(data.strip())
 
     def close(self):
         super().close()
         self._flush()
 
 
-def extract_html(html: str, base_url: str, max_links: int = 300) -> tuple[str, str, list[Link]]:
+def extract_parts(html: str, base_url: str, max_links: int = 300) -> tuple[str, str, list[Link], str]:
+    """(title, readable text, links, chrome text). Hidden text appears in none of them."""
     reader = _Reader(base_url, max_links)
     reader.feed(html)
     reader.close()
     title = re.sub(r"\s+", " ", "".join(reader.title_parts)).strip()[:300]
-    return title, "\n".join(reader.lines), reader.links
+    return title, "\n".join(reader.lines), reader.links, "\n".join(reader.chrome)[:2000]
+
+
+def extract_html(html: str, base_url: str, max_links: int = 300) -> tuple[str, str, list[Link]]:
+    return extract_parts(html, base_url, max_links)[:3]
 
 
 def build_snapshot(result, limits) -> Snapshot:
@@ -178,9 +187,9 @@ def build_snapshot(result, limits) -> Snapshot:
         decoded = result.body.decode("utf-8", "replace")
     if result.content_type == "text/plain":
         lines = (re.sub(r"[ \t\f\v\r]+", " ", line).strip() for line in decoded.split("\n"))
-        title, text, links = "", "\n".join(line for line in lines if line), []
+        title, text, links, chrome = "", "\n".join(line for line in lines if line), [], ""
     else:
-        title, text, links = extract_html(decoded, result.final_url, limits.max_links)
+        title, text, links, chrome = extract_parts(decoded, result.final_url, limits.max_links)
     truncated = result.truncated or len(text) > limits.max_text_chars
     text = text[: limits.max_text_chars]
     return Snapshot(
@@ -192,4 +201,5 @@ def build_snapshot(result, limits) -> Snapshot:
         fetched_at=datetime.now(timezone.utc).isoformat(timespec="seconds"),
         truncated=truncated,
         links=links,
+        chrome=chrome,
     )

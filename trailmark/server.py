@@ -1,38 +1,34 @@
-"""HTTP surface: GET /, GET /health, GET /traces, POST /ask. Same app on Vercel and in the container."""
+"""The live URL: a status page and /health. It serves no answers and runs no model.
+
+The graded product is the contract CLI in app/, which has no server and no port. This page exists so
+a person can see the true state of the entry. Every AMD statement is computed from the machine and
+from committed evidence files, on each request.
+"""
 
 from __future__ import annotations
 
-import json
 import os
-import threading
-import time
+from html import escape
 from pathlib import Path
 
 from fastapi import FastAPI, Request
-from fastapi.concurrency import run_in_threadpool
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 
-from . import __version__, adapter, agent, config, gpu, replay
-from .extractive import ExtractiveBackend
-from .llm import LLMBackend
-from .netguard import BlockedURL
+from . import __version__, evidence, gpu
 
 WEB = Path(__file__).with_name("web")
-SCHEMA = adapter.load_schema()
-MAX_BODY = 16_384
-MAX_QUESTION = 500
-RATE_WINDOW = 60.0
-RATE_MAX = 20
+REPO = "https://github.com/alexvec/amd-ai-league-lablab"
+NO_RUN = "No AMD run has taken place. No AMD model has run for this entry."
+NO_QUALIFYING_RUN = "No AMD model run qualifies for this entry yet. Committed evidence folders that did not qualify: {count}. Read them in the repository."
+UNREADABLE = "This deployment could not read its evidence folder, so it cannot say whether an AMD run took place."
+BLOCKED = "As of 2026-11-03 the run is blocked: the hackathon notebook says the operator's email is not registered, so no notebook can launch."
 SECURITY_HEADERS = {
-    "Content-Security-Policy": "default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'",
+    "Content-Security-Policy": "default-src 'none'; style-src 'self'; img-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'",
     "X-Content-Type-Options": "nosniff",
     "Referrer-Policy": "no-referrer",
 }
-STATIC = {"app.js": "text/javascript; charset=utf-8", "style.css": "text/css; charset=utf-8"}
 
-app = FastAPI(title="Trailmark", version=__version__, docs_url=None, redoc_url=None, openapi_url=None)
-_hits: dict[str, list[float]] = {}
-_hits_lock = threading.Lock()
+app = FastAPI(title="Trailmark status", version=__version__, docs_url=None, redoc_url=None, openapi_url=None)
 
 
 @app.middleware("http")
@@ -43,158 +39,118 @@ async def _security_headers(request: Request, call_next):
     return response
 
 
-def rate_limited(client: str, now: float | None = None) -> bool:
-    """Best effort, per process. On serverless each instance counts separately."""
-    now = time.monotonic() if now is None else now
-    with _hits_lock:
-        recent = [t for t in _hits.get(client, []) if now - t < RATE_WINDOW]
-        if len(_hits) > 5000:
-            _hits.clear()
-        limited = len(recent) >= RATE_MAX
-        if not limited:
-            recent.append(now)
-        _hits[client] = recent
-    return limited
-
-
-def _client_id(request: Request) -> str:
-    # Forwarding headers are only trusted on Vercel, whose edge sets them.
-    if os.environ.get("VERCEL"):
-        forwarded = request.headers.get("x-real-ip") or request.headers.get("x-forwarded-for", "")
-        if forwarded:
-            return forwarded.split(",")[0].strip()
-    return request.client.host if request.client else "unknown"
-
-
-def make_backend():
-    choice = config.backend_choice()
-    if choice == "llm":
-        settings = config.llm_settings()
-        if not settings["base_url"] or not settings["model"]:
-            raise ValueError("TRAILMARK_BACKEND=llm needs TRAILMARK_LLM_BASE_URL and TRAILMARK_LLM_MODEL")
-        return LLMBackend.from_settings(settings)
-    if choice == "extractive":
-        return ExtractiveBackend()
-    raise ValueError(f"unknown TRAILMARK_BACKEND: {choice}")
-
-
-def _configured_backend_name() -> tuple[str, str | None, str | None]:
-    """(backend, model, config error). Never contacts the network except a configured LLM server."""
-    choice = config.backend_choice()
-    if choice == "replay":
-        return "replay", None, None
-    try:
-        backend = make_backend()
-    except ValueError as exc:
-        return "misconfigured", None, str(exc)
-    return backend.name, backend.model, None
+def _deployment() -> str:
+    return "vercel-serverless" if os.environ.get("VERCEL") else "local"
 
 
 def amd_status() -> dict:
-    """Every field is read from the machine or from the committed traces."""
     gpu_name, gpu_source = gpu.detect_cached()
-    runs = replay.amd_runs()
-    backend, _, _ = _configured_backend_name()
-    on_amd = backend.startswith("rocm-")
-    if on_amd:
-        statement = f"This deployment is serving inference from a local model server on {gpu_name}."
+    runs = evidence.amd_runs()
+    readable = evidence.folder_readable()
+    rejected = evidence.rejected_folders()
+    if not readable:
+        statement = UNREADABLE
+    elif runs:
+        names = ", ".join(sorted({run["gpu"] for run in runs}))
+        statement = f"Committed AMD runs in this repository: {len(runs)}, on {names}. See the evidence files. This page itself runs no model."
+    elif rejected:
+        statement = NO_QUALIFYING_RUN.format(count=len(rejected))
     else:
-        statement = "This deployment does not run inference on AMD hardware."
-    if runs:
-        statement += f" Recorded AMD runs in this repository: {len(runs)}, on {', '.join(sorted({r['gpu'] for r in runs}))}."
-    else:
-        statement += " No AMD run has taken place yet: the repository holds no trace recorded on an AMD GPU."
+        statement = NO_RUN
     return {
-        "this_deployment_inference_on_amd": on_amd,
+        "model_running_in_this_deployment": False,
         "gpu_reported_by_this_machine": gpu_name,
         "gpu_source": gpu_source,
-        "recorded_amd_runs": len(runs),
+        "evidence_folder_readable": readable,
+        "recorded_amd_runs": len(runs) if readable else None,
+        "runs": runs,
+        "folders_not_counted": rejected,
+        "done_condition_met": bool(runs),
         "statement": statement,
     }
 
 
-def _deployment() -> str:
-    if os.environ.get("VERCEL"):
-        return "vercel-serverless"
-    return os.environ.get("TRAILMARK_DEPLOYMENT", "local")
-
-
 @app.api_route("/health", methods=["GET", "HEAD"])
 def health():
-    backend, model, error = _configured_backend_name()
-    body = {
-        "status": "ok" if not error else "degraded",
-        "backend": backend,
-        "model": model,
+    amd = amd_status()
+    return {
+        # Read from this deployment: "ok" means it could read the evidence the statement below rests on.
+        "status": "ok" if amd["evidence_folder_readable"] else "degraded",
+        "entry_state": "finished: a committed AMD run qualifies" if amd["done_condition_met"] else "unfinished: no qualifying AMD run",
+        "recorded_amd_runs": amd["recorded_amd_runs"],
+        "service": "status page only",
+        "answers_served": False,
+        "backend": "none",
+        "model": None,
         "deployment": _deployment(),
         "version": __version__,
-        "replay_traces": len(replay.list_traces()),
-        "amd": amd_status(),
+        "amd": amd,
     }
-    if error:
-        body["error"] = error
-    return body
 
 
-@app.get("/traces")
-def traces():
-    return {"traces": replay.list_traces()}
+def _runs_table(runs: list[dict]) -> str:
+    if not runs:
+        return "<p>The evidence folder holds no qualifying run, so there are no AMD figures to show.</p>"
+    rows = "".join(
+        "<tr>" + "".join(f"<td>{escape(str(run[key]))}</td>" for key in ("run", "gpu", "hip", "model", "vram_peak_gib", "fixture_correct", "fixture_total")) + "</tr>"
+        for run in runs
+    )
+    return (
+        "<table><tr><th>Run</th><th>GPU</th><th>ROCm (torch.version.hip)</th><th>Model</th><th>Peak VRAM GiB</th><th>Fixture matched</th><th>Of</th></tr>"
+        f"{rows}</table><p class=\"note\">Fixture questions are invented by this project. They are not the Match's questions.</p>"
+    )
 
 
-def _error(status: int, message: str, **extra) -> JSONResponse:
-    return JSONResponse({"error": message, **extra}, status_code=status)
+def render_index() -> str:
+    amd = amd_status()
+    return f"""<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trailmark status: AMD AI League, Match 4</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<main>
+<h1>Trailmark</h1>
+<p class="lede">A contract-shaped web retrieval container for the AMD AI League, Match 4. Given a question, it finds the one value on a set of pages that answers it, names only the pages that prove it, and returns nothing if they do not. Not submitted. No evaluator has seen it.</p>
+<p class="amd" id="amd-statement">{escape(amd["statement"])}</p>
+<section class="card">
+<h2>AMD evidence</h2>
+{_runs_table(amd["runs"])}
+<p class="note" id="done-rule">Done means a real run on an AMD GPU with measured, committed evidence. Until then this entry is unfinished.{" " + escape(BLOCKED) if not amd["runs"] else ""}</p>
+</section>
+<section class="card">
+<h2>What this page is</h2>
+<p id="page-scope">A status page. It runs no model and serves no answers. The product is a command-line program in a Docker image that an evaluator execs, so there is nothing to try here.</p>
+</section>
+<section class="card">
+<h2>What exists and what does not</h2>
+<ul id="build-state">
+<li>Written and tested on a Mac: the CLI, page sources, index, span verifier, citation code and socket service, using a scripted stub in place of the model and a fixture site invented for the purpose. That shows the plumbing works. It is not the required capability.</li>
+<li>Written and never run: the model code, and the GPU run script.</li>
+<li>Written and never built: the Docker image on the mandated ROCm base.</li>
+<li>Unknown: the Match 4 interface. It is assumed from the Match 3 kit, and the assumptions sit in one config file.</li>
+</ul>
+</section>
+<p class="note"><a id="repo-link" href="{REPO}">Source and runbook on GitHub</a> &middot; <a id="health-link" href="/health">/health</a> reads this state as JSON.</p>
+</main>
+</body>
+</html>
+"""
 
 
-@app.post("/ask")
-async def ask(request: Request):
-    raw = await request.body()
-    if len(raw) > MAX_BODY:
-        return _error(413, "request body too large")
-    try:
-        body = json.loads(raw)
-    except (ValueError, RecursionError):
-        return _error(400, "body must be JSON")
-    if not isinstance(body, dict):
-        return _error(400, "body must be a JSON object")
-
-    if body.get("mode") == "replay" or config.backend_choice() == "replay":
-        trace_id = body.get("trace_id")
-        if trace_id is not None and not isinstance(trace_id, str):
-            return _error(400, "trace_id must be a string")
-        try:
-            return adapter.write_response(replay.replay(trace_id), SCHEMA)
-        except replay.TraceNotFound:
-            return _error(404, "no such recorded trace")
-
-    fields = adapter.read_request(body, SCHEMA)
-    question, start_url = fields.get("question"), fields.get("start_url")
-    if not isinstance(question, str) or not 3 <= len(question.strip()) <= MAX_QUESTION:
-        return _error(422, f"question must be text of 3 to {MAX_QUESTION} characters")
-    if start_url in ("", None):
-        start_url = None
-    elif not isinstance(start_url, str):
-        return _error(422, "start_url must be a string")
-    if rate_limited(_client_id(request)):
-        return _error(429, f"limit of {RATE_MAX} questions per minute reached")
-    try:
-        backend = await run_in_threadpool(make_backend)
-    except ValueError as exc:
-        return _error(503, str(exc))
-    inject = body.get("demo_inject_fabricated_claim") is True
-    try:
-        result = await run_in_threadpool(agent.run, question.strip(), start_url, backend, config.public_limits(), inject_fabricated=inject)
-    except BlockedURL as exc:
-        return _error(400, f"URL refused: {exc}", refused=True)
-    return adapter.write_response(result, SCHEMA)
-
-
-@app.api_route("/", methods=["GET", "HEAD"])
+@app.api_route("/", methods=["GET", "HEAD"], response_class=HTMLResponse)
 def index():
-    return FileResponse(WEB / "index.html", media_type="text/html; charset=utf-8")
+    return HTMLResponse(render_index())
 
 
-@app.get("/static/{name}")
-def static_file(name: str):
-    if name not in STATIC:
-        return _error(404, "not found")
-    return FileResponse(WEB / name, media_type=STATIC[name])
+@app.get("/static/style.css")
+def stylesheet():
+    return FileResponse(WEB / "style.css", media_type="text/css; charset=utf-8")
+
+
+@app.exception_handler(404)
+async def _not_found(_request: Request, _exc):
+    return JSONResponse({"error": "not found. This deployment has only / and /health."}, status_code=404)

@@ -1,10 +1,9 @@
 {
-  "version": 2,
+  "framework": "fastapi",
   "functions": {
-    "api/index.py": {
+    "app.py": {
       "maxDuration": 40,
       "includeFiles": "{trailmark/**,traces/**}"
     }
-  },
-  "rewrites": [{ "source": "/(.*)", "destination": "/api/index" }]
+  }
 }

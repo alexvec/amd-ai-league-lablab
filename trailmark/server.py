@@ -119,7 +119,7 @@ def _deployment() -> str:
     return os.environ.get("TRAILMARK_DEPLOYMENT", "local")
 
 
-@app.get("/health")
+@app.api_route("/health", methods=["GET", "HEAD"])
 def health():
     backend, model, error = _configured_backend_name()
     body = {
@@ -188,7 +188,7 @@ async def ask(request: Request):
     return adapter.write_response(result, SCHEMA)
 
 
-@app.get("/")
+@app.api_route("/", methods=["GET", "HEAD"])
 def index():
     return FileResponse(WEB / "index.html", media_type="text/html; charset=utf-8")
 

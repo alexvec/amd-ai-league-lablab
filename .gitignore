@@ -13,3 +13,4 @@ test-results/
 amd/logs/
 .amd-store/
 demo-recordings/
+.vercel

@@ -88,6 +88,11 @@ def test_amd_status_changes_only_with_a_recorded_amd_trace(client, trace_dir):
     assert amd["recorded_amd_runs"] == 1 and "GPU-STRING-FROM-TRACE" in amd["statement"]
 
 
+@pytest.mark.parametrize("path", ["/", "/health"])
+def test_head_requests_are_answered(client, path):
+    assert client.head(path).status_code == 200
+
+
 def test_acceptance_3_ui_has_no_hard_coded_backend():
     html = (WEB / "index.html").read_text()
     assert "extractive-no-llm" not in html and "rocm" not in html.lower()

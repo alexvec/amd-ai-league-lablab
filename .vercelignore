@@ -1,7 +1,6 @@
 # Allowlist: only what the app needs is uploaded. Everything else stays on this machine.
 *
-!api
-!api/**
+!app.py
 !trailmark
 !trailmark/**
 !traces

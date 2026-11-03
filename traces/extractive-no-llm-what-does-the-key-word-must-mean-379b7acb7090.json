@@ -1,0 +1,180 @@
+{
+ "status": "answered",
+ "question": "What does the key word MUST mean?",
+ "start_url": "https://www.rfc-editor.org/rfc/rfc2119.html",
+ "answer": "MUST This word, or the terms \"REQUIRED\" or \"SHALL\", mean that the definition is an absolute requirement of the specification. Authors who follow these guidelines should incorporate this phrase near the beginning of their document: The key words \"MUST\", \"MUST NOT\", \"REQUIRED\", \"SHALL\", \"SHALL NOT\", \"SHOULD\", \"SHOULD NOT\", \"RECOMMENDED\", \"MAY\", and \"OPTIONAL\" in this document are to be interpreted as described in RFC 2119. SHOULD This word, or the adjective \"RECOMMENDED\", mean that there may exist valid reasons in particular circumstances to ignore a particular item, but the full implications must be understood and carefully weighed before choosing a different course.",
+ "sources": [
+  "https://www.rfc-editor.org/rfc/rfc2119.html"
+ ],
+ "claims": [
+  {
+   "claim": "MUST This word, or the terms \"REQUIRED\" or \"SHALL\", mean that the definition is an absolute requirement of the specification.",
+   "quote": "MUST This word, or the terms \"REQUIRED\" or \"SHALL\", mean that the definition is an absolute requirement of the specification.",
+   "source_url": "https://www.rfc-editor.org/rfc/rfc2119.html",
+   "verified": true,
+   "match": "exact",
+   "reason": "ok",
+   "start": 1040,
+   "end": 1165,
+   "snapshot_sha256": "9cbaa7130971754b1d6cb371504ce18ec0a645ae601fd0b517dbe3b29f036f34",
+   "in_answer": true,
+   "injected_for_demo": false,
+   "attempt": 0
+  },
+  {
+   "claim": "Authors who follow these guidelines should incorporate this phrase near the beginning of their document: The key words \"MUST\", \"MUST NOT\", \"REQUIRED\", \"SHALL\", \"SHALL NOT\", \"SHOULD\", \"SHOULD NOT\", \"RECOMMENDED\", \"MAY\", and \"OPTIONAL\" in this document are to be interpreted as described in RFC 2119.",
+   "quote": "Authors who follow these guidelines should incorporate this phrase near the beginning of their document: The key words \"MUST\", \"MUST NOT\", \"REQUIRED\", \"SHALL\", \"SHALL NOT\", \"SHOULD\", \"SHOULD NOT\", \"RECOMMENDED\", \"MAY\", and \"OPTIONAL\" in this document are to be interpreted as described in RFC 2119.",
+   "source_url": "https://www.rfc-editor.org/rfc/rfc2119.html",
+   "verified": true,
+   "match": "exact",
+   "reason": "ok",
+   "start": 626,
+   "end": 924,
+   "snapshot_sha256": "9cbaa7130971754b1d6cb371504ce18ec0a645ae601fd0b517dbe3b29f036f34",
+   "in_answer": true,
+   "injected_for_demo": false,
+   "attempt": 0
+  },
+  {
+   "claim": "SHOULD This word, or the adjective \"RECOMMENDED\", mean that there may exist valid reasons in particular circumstances to ignore a particular item, but the full implications must be understood and carefully weighed before choosing a different course.",
+   "quote": "SHOULD This word, or the adjective \"RECOMMENDED\", mean that there may exist valid reasons in particular circumstances to ignore a particular item, but the full implications must be understood and carefully weighed before choosing a different course.",
+   "source_url": "https://www.rfc-editor.org/rfc/rfc2119.html",
+   "verified": true,
+   "match": "exact",
+   "reason": "ok",
+   "start": 1295,
+   "end": 1544,
+   "snapshot_sha256": "9cbaa7130971754b1d6cb371504ce18ec0a645ae601fd0b517dbe3b29f036f34",
+   "in_answer": true,
+   "injected_for_demo": false,
+   "attempt": 0
+  }
+ ],
+ "snapshots": [
+  {
+   "url": "https://www.rfc-editor.org/rfc/rfc2119.html",
+   "final_url": "https://www.rfc-editor.org/rfc/rfc2119.html",
+   "title": "",
+   "sha256": "9cbaa7130971754b1d6cb371504ce18ec0a645ae601fd0b517dbe3b29f036f34",
+   "fetched_at": "2026-11-03T11:43:16+00:00",
+   "truncated": false,
+   "chars": 4094,
+   "text": "Network Working Group S. Bradner Request for Comments: 2119 Harvard University BCP: 14 March 1997 Category: Best Current Practice Key words for use in RFCs to Indicate Requirement Levels Status of this Memo This document specifies an Internet Best Current Practices for the Internet Community, and requests discussion and suggestions for improvements. Distribution of this memo is unlimited. Abstract In many standards track documents several words are used to signify the requirements in the specification. These words are often capitalized. This document defines these words as they should be interpreted in IETF documents. Authors who follow these guidelines should incorporate this phrase near the beginning of their document: The key words \"MUST\", \"MUST NOT\", \"REQUIRED\", \"SHALL\", \"SHALL NOT\", \"SHOULD\", \"SHOULD NOT\", \"RECOMMENDED\", \"MAY\", and \"OPTIONAL\" in this document are to be interpreted as described in RFC 2119. Note that the force of these words is modified by the requirement level of the document in which they are used. 1. MUST This word, or the terms \"REQUIRED\" or \"SHALL\", mean that the definition is an absolute requirement of the specification. 2. MUST NOT This phrase, or the phrase \"SHALL NOT\", mean that the definition is an absolute prohibition of the specification. 3. SHOULD This word, or the adjective \"RECOMMENDED\", mean that there may exist valid reasons in particular circumstances to ignore a particular item, but the full implications must be understood and carefully weighed before choosing a different course. 4. SHOULD NOT This phrase, or the phrase \"NOT RECOMMENDED\" mean that there may exist valid reasons in particular circumstances when the particular behavior is acceptable or even useful, but the full implications should be understood and the case carefully weighed before implementing any behavior described with this label. Bradner Best Current Practice [Page 1]\nRFC 2119 RFC Key Words March 1997 5. MAY This word, or the adjective \"OPTIONAL\", mean that an item is truly optional. One vendor may choose to include the item because a particular marketplace requires it or because the vendor feels that it enhances the product while another vendor may omit the same item. An implementation which does not include a particular option MUST be prepared to interoperate with another implementation which does include the option, though perhaps with reduced functionality. In the same vein an implementation which does include a particular option MUST be prepared to interoperate with another implementation which does not include the option (except, of course, for the feature the option provides.) 6. Guidance in the use of these Imperatives Imperatives of the type defined in this memo must be used with care and sparingly. In particular, they MUST only be used where it is actually required for interoperation or to limit behavior which has potential for causing harm (e.g., limiting retransmisssions) For example, they must not be used to try to impose a particular method on implementors where the method is not required for interoperability. 7. Security Considerations These terms are frequently used to specify behavior with security implications. The effects on security of not implementing a MUST or SHOULD, or doing something the specification says MUST NOT or SHOULD NOT be done may be very subtle. Document authors should take the time to elaborate the security implications of not following recommendations or requirements as most implementors will not have had the benefit of the experience and discussion that produced the specification. 8. Acknowledgments The definitions of these terms are an amalgam of definitions taken from a number of RFCs. In addition, suggestions have been incorporated from a number of people including Robert Ullmann, Thomas Narten, Neal McBurnett, and Robert Elz. Bradner Best Current Practice [Page 2]\nRFC 2119 RFC Key Words March 1997 9. Author's Address Scott Bradner Harvard University 1350 Mass. Ave. Cambridge, MA 02138 phone - +1 617 495 3864 email - sob@harvard.edu Bradner Best Current Practice [Page 3]"
+  }
+ ],
+ "notes": [],
+ "trace": {
+  "run_id": "379b7acb7090",
+  "mode": "live",
+  "recorded_at": "2026-11-03T11:43:16+00:00",
+  "backend": "extractive-no-llm",
+  "model": null,
+  "gpu": null,
+  "gpu_source": null,
+  "inference_on_amd": false,
+  "tokens": {
+   "prompt": null,
+   "completion": null
+  },
+  "wall_ms": 2018,
+  "pages_fetched": 1,
+  "limits": {
+   "max_pages": 5,
+   "max_steps": 40,
+   "max_redirects": 4,
+   "max_bytes": 2000000,
+   "max_robots_bytes": 500000,
+   "max_text_chars": 120000,
+   "max_links": 300,
+   "connect_timeout": 5.0,
+   "read_timeout": 8.0,
+   "per_fetch_seconds": 10.0,
+   "request_seconds": 25.0,
+   "per_host_delay": 0.4,
+   "max_llm_calls": 8,
+   "max_revisions": 2
+  },
+  "steps": [
+   {
+    "type": "robots",
+    "url": "https://www.rfc-editor.org/robots.txt",
+    "status": 200,
+    "note": "parsed",
+    "n": 1,
+    "t_ms": 1123
+   },
+   {
+    "type": "fetch",
+    "url": "https://www.rfc-editor.org/rfc/rfc2119.html",
+    "final_url": "https://www.rfc-editor.org/rfc/rfc2119.html",
+    "status": 200,
+    "bytes": 5830,
+    "chars": 4094,
+    "truncated": false,
+    "sha256": "9cbaa7130971754b1d6cb371504ce18ec0a645ae601fd0b517dbe3b29f036f34",
+    "title": "",
+    "ms": 1935,
+    "n": 2,
+    "t_ms": 2015
+   },
+   {
+    "type": "select_sentences",
+    "method": "keyword overlap weighted by rarity",
+    "candidates": 18,
+    "chosen": [
+     {
+      "score": 0.658,
+      "url": "https://www.rfc-editor.org/rfc/rfc2119.html"
+     },
+     {
+      "score": 0.645,
+      "url": "https://www.rfc-editor.org/rfc/rfc2119.html"
+     },
+     {
+      "score": 0.63,
+      "url": "https://www.rfc-editor.org/rfc/rfc2119.html"
+     }
+    ],
+    "n": 3,
+    "t_ms": 2017
+   },
+   {
+    "type": "verify",
+    "source_url": "https://www.rfc-editor.org/rfc/rfc2119.html",
+    "verified": true,
+    "match": "exact",
+    "reason": "ok",
+    "injected_for_demo": false,
+    "n": 4,
+    "t_ms": 2017
+   },
+   {
+    "type": "verify",
+    "source_url": "https://www.rfc-editor.org/rfc/rfc2119.html",
+    "verified": true,
+    "match": "exact",
+    "reason": "ok",
+    "injected_for_demo": false,
+    "n": 5,
+    "t_ms": 2017
+   },
+   {
+    "type": "verify",
+    "source_url": "https://www.rfc-editor.org/rfc/rfc2119.html",
+    "verified": true,
+    "match": "exact",
+    "reason": "ok",
+    "injected_for_demo": false,
+    "n": 6,
+    "t_ms": 2017
+   }
+  ],
+  "generated_by": {
+   "tool": "trailmark.record",
+   "version": "0.1.0",
+   "git_commit": "a4b91c9",
+   "platform": "macOS-15.7.4-arm64-arm-64bit"
+  },
+  "gpu_vram_after_run": null
+ }
+}

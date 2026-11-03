@@ -1,0 +1,145 @@
+{
+ "status": "answered",
+ "question": "When was the Eiffel Tower completed?",
+ "start_url": null,
+ "answer": "As one of the most iconic and recognizable structures in the world, the Eiffel Tower, completed in 1889, has been the inspiration for the creation of over 50 similar towers around the world.",
+ "sources": [
+  "https://en.wikipedia.org/wiki/Eiffel_Tower_replicas_and_derivatives"
+ ],
+ "claims": [
+  {
+   "claim": "As one of the most iconic and recognizable structures in the world, the Eiffel Tower, completed in 1889, has been the inspiration for the creation of over 50 similar towers around the world.",
+   "quote": "As one of the most iconic and recognizable structures in the world, the Eiffel Tower, completed in 1889, has been the inspiration for the creation of over 50 similar towers around the world.",
+   "source_url": "https://en.wikipedia.org/wiki/Eiffel_Tower_replicas_and_derivatives",
+   "verified": true,
+   "match": "exact",
+   "reason": "ok",
+   "start": 156,
+   "end": 346,
+   "snapshot_sha256": "42b96aab9a6aceccaca227370a4f1416a1ce18752ae9e32d95062909121a4ece",
+   "in_answer": true,
+   "injected_for_demo": false,
+   "attempt": 0
+  }
+ ],
+ "snapshots": [
+  {
+   "url": "https://en.wikipedia.org/wiki/Eiffel_Tower_replicas_and_derivatives",
+   "final_url": "https://en.wikipedia.org/wiki/Eiffel_Tower_replicas_and_derivatives",
+   "title": "Eiffel Tower replicas and derivatives - Wikipedia",
+   "sha256": "42b96aab9a6aceccaca227370a4f1416a1ce18752ae9e32d95062909121a4ece",
+   "fetched_at": "2026-11-03T11:43:20+00:00",
+   "truncated": false,
+   "chars": 23077,
+   "text": "Jump to content\nFrom Wikipedia, the free encyclopedia\nThe original Eiffel Tower in Paris. This article discusses replicas and derivatives of this building.\nAs one of the most iconic and recognizable structures in the world, the Eiffel Tower, completed in 1889, has been the inspiration for the creation of over 50 similar towers around the world. Most are not exact replicas, though there are many that resemble it closely, while others look slightly different. The Eiffel Tower has also inspired other towers that are not close resembling replicas and therefore are not listed here, for example the Blackpool Tower.\nReplicas of known height\nThe tower is 330 metres (1,083 ft) tall. Other Eiffel-inspired towers are listed in the table in descending order of scale and height, imperial measurements rounded to the nearest foot:\nName | Country | Location | Height | Scale | Coordinates | Notes | Image\n| Watkin's Tower | United Kingdom | Wembley, Greater London | 358 m (1,175 ft) planned height | 1:1 scale | 51°33′20″N 0°16′46″W﻿ / ﻿51.55556°N 0.27944°W | Never completed: construction begun in 1891, demolished in 1907. |\n| Dragon Tower | China | Harbin, Heilongjiang | 336 m (1,102 ft) | 1:1 scale | 45°44′45.55″N 126°40′28″E﻿ / ﻿45.7459861°N 126.67444°E | Communication tower |\n| Tokyo Tower | Japan | Minato, Tokyo | 332.5 m (1,091 ft) | 1:1 scale | 35°39′31″N 139°44′44″E﻿ / ﻿35.65861°N 139.74556°E | Its architect also designed the Sapporo TV Tower |\n| Nagoya TV Tower | Japan | Nagoya | 180 m (591 ft) | 1:2 scale | 35°10′20″N 136°54′30″E﻿ / ﻿35.17222°N 136.90833°E | Though principally a communications tower, it also features two restaurants and an open-air observation deck; completed in 1954 |\n| New Brighton Tower | United Kingdom | New Brighton, Merseyside | 173 m (568 ft) | 1:2 scale | 53°26′12.37″N 3°02′11.03″W﻿ / ﻿53.4367694°N 3.0363972°W | Completed by 1900, demolished by 1921 |\n| Las Vegas Eiffel Tower | United States | Paradise, Nevada | 164.6 m (540 ft) | 1:2 scale | 36°6′45″N 115°10′20″W﻿ / ﻿36.11250°N 115.17222°W | Paris Las Vegas hotel/casino on the Las Vegas Strip |\n| Ismaning Radio Tower | Germany | Ismaning, Bavaria | 163 m (535 ft) | 1:2 scale | 48°15′1″N 11°45′0″E﻿ / ﻿48.25028°N 11.75000°E | Wooden radio tower used for medium wave broadcasting. Demolished in 1983 |\n| Funkturm Berlin | Germany | Berlin | 150 m (492 ft) | 1:2 scale | 52°30′18.2″N 13°16′41.45″E﻿ / ﻿52.505056°N 13.2781806°E | Broadcasting tower built 1924 and 1926, no longer functions as such; civic landmark featuring restaurant and observation deck |\n| The Parisian | Macau | Cotai Strip, Macau | 150 m (492 ft) | 1:2 scale | 22°08′37″N 113°33′46″E﻿ / ﻿22.14364°N 113.56283°E | Completed and opened on 13 September 2016 |\n| Eiffel Tower | China | Shenzhen | 108 m (354 ft) | 1:3 scale | 22°32′13.33″N 113°58′9.51″E﻿ / ﻿22.5370361°N 113.9693083°E | Dominant structure at Window of the World, a collection of nearly 130 reproductions of famous tourist attractions, opened 1993 |\n| Eiffel Tower of Tianducheng Community | China | Hangzhou | 108 m (354 ft) | 1:3 scale | 30°23′6.72″N 120°14′36.60″E﻿ / ﻿30.3852000°N 120.2435000°E | Central feature of Tianducheng, a Paris-themed housing development, home to some 50,000 people |\n| Eiffel Tower | United States | Mason, Ohio | 101 m (331 ft) (approximately) | 1:3 scale | 39°20′36″N 84°16′1″W﻿ / ﻿39.34333°N 84.26694°W | Kings Island amusement park |\n| Eiffel Tower | United States | Doswell, Virginia | 101 m (331 ft) (approximately) | 1:3 scale | 37°50′23″N 77°26′43″W﻿ / ﻿37.83972°N 77.44528°W | Kings Dominion amusement park |\n| Metallic tower of Fourvière | France | Lyon | 101 m (331 ft) | 1:4 scale | 45°45′49.57″N 4°49′20.16″E﻿ / ﻿45.7637694°N 4.8222667°E | Built between 1892 and 1894 as observation tower; now used solely for communications. |\n| Eiffel Tower replica in Bahria Town Lahore | Pakistan | Bahria Town Lahore. Lahore | 80 m (262 ft) | 1:4 scale | 31°21′20.83″N 74°11′5.27″E﻿ / ﻿31.3557861°N 74.1847972°E | Constructed in 2014 as a focal point for a housing estate |\n| Eiffel Tower replica in Bahria Town Karachi | Pakistan | Bahria Town Karachi, Karachi | 80 m (262 ft) | 1:4 scale | 25°8′11.52″N 67°21′0.77″E﻿ / ﻿25.1365333°N 67.3502139°E | Construction started in 2019 and opened for public visits on 31 December 2020. |\n| Torre del Reformador | Guatemala | Guatemala City | 75 m (246 ft) | 1:5 scale | 14°36′46.9″N 90°31′0.49″W﻿ / ﻿14.613028°N 90.5168028°W | Erected in 1935 |\n| Tsūtenkaku (\"Tower Reaching Heaven\") | Japan | Osaka | 64 m (210 ft) | 1:6 scale | 34°39′08″N 135°30′22″E﻿ / ﻿34.65222°N 135.50611°E | At Luna Park; destroyed by fire 1945, replaced with a different design |\n| Petřín Lookout Tower | Czech Republic | Prague | 63.5 m (208 ft) | 1:6 scale | 50°05′0.76″N 14°23′42.18″E﻿ / ﻿50.0835444°N 14.3950500°E | Built in 1891 as an observation tower with octagonal plan; now also used for communications. |\n| Torre Eiffel | Mexico | Gómez Palacio, Durango | 58 m (190 ft) (approximately) | 1:6 scale | 25°32′59.50″N 103°28′44.68″W﻿ / ﻿25.5498611°N 103.4790778°W | Donated by the French-speaking community of Gómez Palacio in 2007 |\n| Eiffel Tower | Romania | Slobozia | 54 m (177 ft) | 1:6 scale | 44°33′27″N 27°19′59″E﻿ / ﻿44.55750°N 27.33306°E | Erected as part of a private tourist complex |\n| Eiffel Tower | Russia | Parizh, Chelyabinsk Oblast | 50 m (164 ft) | 1:6 scale | 53°17′51.02″N 60°5′59.46″E﻿ / ﻿53.2975056°N 60.0998500°E | Built by South Ural Cell Telephone company as a cellphone tower |\n| AWA Tower | Australia | Sydney, New South Wales | 46 m (151 ft) | 1:6 scale | 33°52′1″S 151°12′20″E﻿ / ﻿33.86694°S 151.20556°E | Communications tower sits atop 12-story building, completed in 1939 |\n| Bordeaux Tower | United States | Fayetteville, North Carolina | 45 m (148 ft) (approximately) | 1:6 scale | 35°1′48″N 78°55′50″W﻿ / ﻿35.03000°N 78.93056°W | Built as part of a shopping center |\n| Copenhagen Zoo Tower | Denmark | Copenhagen | 43.5 m (143 ft) | 1:6 scale | 55°40′19.16″N 12°31′24.70″E﻿ / ﻿55.6719889°N 12.5235278°E | Built in 1905, it is one of the world's tallest observation towers built of wood |\n| Eiffel Tower | Colombia | Sabaneta | 42 m (137 ft)\n(approximately)\n| 1:7 scale | 6°08'56.9\"N 75°36'33.2\"W | Built within the Paris residential unit, in the municipality of Sabaneta. |\n| Tour d'Eiffel de Fes | Morocco | Fez | 39 m (128 ft) | 1:9 scale | | Built in 2012 to honor the bond between the cities of Fez and Paris, but reported to have been removed in 2016 |\n| Eiffel Tower in Pojana Maggiore | Italy | Pojana Maggiore, Vicenza | 38.0 m (125 ft) | 1:9 scale (approximately) | 45°18′58″N 11°30′15″E﻿ / ﻿45.316142916775775°N 11.504182897885602°E | Built in 1999, by a local laser cut company |\n| Bamboo Eiffel Tower | Indonesia | Tasikmalaya Regency | 36 m (118 ft) (approximately) | 1:9 scale (approximately) | | Bamboo structure, in honor of the coronation of Queen Wilhelmina; designed by A. H. van Bebber |\n| Eiffel Tower | Ukraine | Kharkiv | 35 m (115 ft) | 1:9 scale (approximately) | 49°59′23.91″N 36°17′21.91″E﻿ / ﻿49.9899750°N 36.2894194°E | Associated with a French-themed shopping mall. |\n| Eyffela | France | Chambretaud, Chanverrie | 33 m (108 ft) | 1:10 scale | 46°55′20″N 0°57′45″W﻿ / ﻿46.92222°N 0.96250°W | Built to put Chambretaud on the map and to attract tourists from nearby Puy du Fou. Material: iron; weight: 32 tons. |\n| Golden Sands Eiffel Tower | Bulgaria | Varna | 32.4 m (106 ft) | 1:10 scale (approximately) | 43°17′3.91″N 28°2′39.08″E﻿ / ﻿43.2844194°N 28.0441889°E | Built in the resort town as a tourist attraction |\n| Malayer Eiffel Tower | Iran | Malayer, Hamadan | 32 m (105 ft) (approximately) | 1:10 scale | 34°18′58″N 48°48′59″E﻿ / ﻿34.31611°N 48.81639°E | Malayer mini world with 138 historical monuments (under construction) |\n| Paris Center Eiffel Tower | Israel | Netivot | 32 m (105 ft) | 1:10 scale | 31°25′3.05″N 34°35′41.6″E﻿ / ﻿31.4175139°N 34.594889°E | Situated at Paris (Shriki) Center in the southern city of Netivot. |\n| Eiffel Tower | Spain | Parque Europa, Torrejón de Ardoz, Madrid | 30.4 m (100 ft) | 1:10 scale (approximately) | 40°26′22.8″N 3°27′35.2″W﻿ / ﻿40.439667°N 3.459778°W | Completed in 2010; part of an $18m replica theme park. |\n| Kish Eiffel Tower | Iran | Kish Island | 30 m (98 ft) | 1:10 scale | 26°32′13″N 54°01′14″E﻿ / ﻿26.53694°N 54.02056°E | Completed in September 2018 in Pardis 1 Shopping Center. |\n| Umuarama Eiffel Tower | Brazil | Umuarama | 30 m (98 ft) | 1:10 scale | 23°50′3″S 53°21′25″W﻿ / ﻿23.83417°S 53.35694°W | |\n| Eiffel Tower | Belarus | Paryž, Vitebsk Oblast | 30 m (98 ft) (approximately) | 1:10 scale (approximately) | 55°09′22″N 27°23′08″E﻿ / ﻿55.156038°N 27.385659°E | Has a cross at its top. Designed by ksyondz (Catholic minister) Yuosaz Bulka. Has a sculpture of Mary Magdalene and 2 sculptures of angels nearby. |\n| Eiffel Tower | Uzbekistan | Samarkand | 30 m (98 ft) (approximately) | 1:10 scale | 39°39′39″N 66°54′28″E﻿ / ﻿39.6608913°N 66.9077280°E | Sogdian Park. |\n| Filiatra Eiffel Tower | Greece | Filiatra, Messinia | 26 m (85 ft) | 1:18 scale | 37°09′44″N 21°34′59″E﻿ / ﻿37.1621591°N 21.5829313°E | At the entrance of the village, donated in 1960 by Charalambos Fournarakis |\n| Eiffel Tower | United States | Epcot theme park, Lake Buena Vista, Florida | 23 m (75 ft) | 1:14 scale (1:10) | 28°22′6.86″N 81°33′11.89″W﻿ / ﻿28.3685722°N 81.5533028°W | Part of the France Pavilion at Epcot, Walt Disney World; opened in 1982 |\n| Monte Amiata Summit Cross | Italy | Amiata | 22 m (72 ft) | 1:15 scale | 42°53′16.59″N 11°37′30.08″E﻿ / ﻿42.8879417°N 11.6250222°E | Summit cross |\n| Paris, Texas Eiffel Tower | United States | Paris, Texas | 20 m (66 ft) | 1:16 scale | 33°38′23.52″N 95°31′25.92″W﻿ / ﻿33.6398667°N 95.5238667°W | Tower constructed in 1993; the hat was added in 1998 |\n| Eiffel Tower (Paris, Tennessee) | United States | Paris, Tennessee | 18.25 m (60 ft) (approximately) | 1:20 scale | 36°17′12.94″N 88°18′5.41″W﻿ / ﻿36.2869278°N 88.3015028°W | Dedicated on 29 January 1993 |\n| Kyiv's Eiffel Tower | Ukraine | Kyiv | 16 m (52 ft) | 1:20 scale | 50°25′04″N 30°31′45″E﻿ / ﻿50.417645°N 30.529050°E | Built as a part of residential complex \"French quartal\" in 2015 |\n| Rybnik's Eiffel Tower | Poland | Rybnik | 15 m (49 ft) | 1:22 scale | 50°04′13″N 18°31′06″E﻿ / ﻿50.070198°N 18.518286°E | Built on the roundabout in the neighborhood that had been locally known as \"Paris\" (Polish: Paryż) in 2022. |\n| Krasnoyarsk Eiffel Tower | Russia | Krasnoyarsk | 14.8 m (49 ft) | 1:22 scale | 56°02′17″N 92°54′43″E﻿ / ﻿56.038056°N 92.911944°E | |\n| Milwaukee School of Engineering Eiffel Tower | United States | Milwaukee, Wisconsin | 13 m (43 ft) | 1:25 scale | | Temporary model designed and erected by Milwaukee School of Engineering students for the annual Bastille Days festival in Cathedral Square Park for four days every July |\n| Europe Eiffel Tower | Belgium | Brussels | 12.96 m (42.5 ft) | 1:25 scale | 50°53′39.44″N 4°20′21.16″E﻿ / ﻿50.8942889°N 4.3392111°E | Mini-Europe |\n| Green Lake City Eiffel Tower | Indonesia | Tangerang | 12 m (39 ft) | 1:25 scale | 6°10′49.8″S 106°42′19.5″E﻿ / ﻿6.180500°S 106.705417°E | Located in the residential area of Green Lake City |\n| Kabardinka Eiffel Tower | Russia | Kabardinka | 12 m (39 ft) | 1:25 scale | 44°38′59″N 37°55′54″E﻿ / ﻿44.6497327°N 37.9316336°E | Built in 2014 in the resort town as a tourist attraction |\n| Kota Eiffel Tower | India | Kota, Rajasthan | 12 m (39 ft) | 1:25 scale | 25°10′50″N 75°50′47″E﻿ / ﻿25.180476°N 75.846518°E | Feature of Seven Wonders Park, Kota |\n| Eiffel Tower | Japan | Tochigi Prefecture | 12 m (39 ft) | 1:25 scale | 36°48′24″N 139°42′44″E﻿ / ﻿36.806637°N 139.712172°E | At Tobu World Square. The park also has a replica of the Tokyo Tower. |\n| Brisbane Eiffel Tower | Australia | Brisbane, Queensland | 12 m (39 ft) (approximately) | 1:25 scale | 27°28′14″S 153°00′17″E﻿ / ﻿27.470686°S 153.004690°E | Landmark among the sidewalk tables of La Dolce Vita café on Park Rd, Milton which offers Italian cuisine. |\n| Minimundus | Austria | Klagenfurt | 12 m (39 ft) | 1:25 scale | 46°37′11″N 14°15′52″E﻿ / ﻿46.61972°N 14.26444°E | Part of a miniature park |\n| Phú sinh cát tường Eiffel Tower | Vietnam | Long An province | 11 m (36 ft) | 1:30 scale | 10°54′01″N 106°27′43″E﻿ / ﻿10.900408°N 106.461936°E | Part of a miniature park, 7 Wonders of the World |\n| Meccano model | United States | Atlanta, Georgia | 11 m (36 ft) | 1:30 scale | | SciTrek technology museum. No longer exists; museum closed in 2004. |\n| Bauru Eiffel Tower | Brazil | Bauru | 10 m (33 ft) (approximately) | 1:30 scale | 22°19′31″S 49°05′33″W﻿ / ﻿22.32515°S 49.0923627°W | Built in 1978 to commemorate the 25th anniversary of the foundation of the Bauru School of Law at the Instituição Toledo de Ensino. |\n| Taastrup Eiffel Tower | Denmark | Taastrup | 10 m (33 ft) | 1:30 scale | 55°39′0″N 12°17′21″E﻿ / ﻿55.65000°N 12.28917°E | Built to celebrate the 2022 Tour de France starting in Copenhagen. |\n| Montmartre Eiffel Tower | Canada | Montmartre, Saskatchewan | 8.5 m (28 ft) | 1:38 scale | 50°13′16″N 103°26′55″W﻿ / ﻿50.221147°N 103.448703°W | Erected in 2009. Settled by French immigrants, the community calls itself \"Paris of the Prairies\". |\n| Valday Eiffel Tower | Russia | Valday, Novgorod Oblast | 8 m (26 ft) | 1:40 scale | 57°58′33″N 33°16′04″E﻿ / ﻿57.975785°N 33.267781°E | Built in 2018 |\n| Dreyfus Eiffel Tower | United States | Austin, Texas | 7.5 m (25 ft) | 1:45 scale | 30°17′02″N 97°45′06″W﻿ / ﻿30.283898°N 97.751773°W | Current location unknown. Formerly located at Dreyfus Antique Shop, 1901 N. Lamar Blvd., but removed in early 2010s. |\n| Paris, Michigan Eiffel Tower | United States | Paris, Michigan | 7 m (23 ft) (approximately) | 1:50 scale | 43°47′18″N 85°30′02″W﻿ / ﻿43.788287°N 85.500514°W | Situated in a park |\n| Santos Dumont Eiffel Tower Replica | Brazil | Santos Dumont, Minas Gerais | 7 m (23 ft) | 1:50 scale | 21°27′21″S 43°33′07″W﻿ / ﻿21.455859°S 43.552000°W | Built in 2001 to celebrate the centennial anniversary of the flight of Alberto Santos-Dumont around the Eiffel Tower. Santos Dumont is now the name of his birthplace in Brazil. It was formerly known as Palmira. |\n| La Fayette Village | United States | Raleigh, North Carolina | 6.0 m (20 ft) | 1:50 scale | 35° 53' 41.9136\" N, W 78° 37' 19.2036\" W | built as an homage to the French aesthetic of the shopping center |\n| Eiffel Tower | Russia | Zvenigovo | 3.5 m (11 ft) | 1:100 scale | 55°58′19.056″N 48°0′52.5888″E﻿ / ﻿55.97196000°N 48.014608000°E | Erected in the center of the town's main street. |\n| Uman Eiffel Tower | Ukraine | Uman | 3.25 m (10.7 ft) | 1:100 scale | 48°45′0″N 30°13′10″E﻿ / ﻿48.75000°N 30.21944°E | Situated in a central park |\n| Eiffel Tower of Nikitin's Gymnasium | Russia | Voronezh | 3.24 m (10.6 ft) | 1:100 scale | 51°41′28″N 39°11′02″E﻿ / ﻿51.6912261°N 39.1837692°E | Situated in the park of Nikitin's Gymnasium |\n| Eiffel Tower | Azerbaijan | Baku | 3 m (10 ft) (approximately) | 1:110 scale | 40°22′19″N 49°50′40″E﻿ / ﻿40.371932°N 49.844419°E | Sahil Shopping Center, at Parfums de France shop. |\nReplicas of unknown height\nCenterpiece of the Falconcity of Wonders - a planned new development project in Dubai, UAE, featuring seven modern wonders of the world (planned). 25°5′43.8″N 55°20′31.5″E﻿ / ﻿25.095500°N 55.342083°E (approximate coordinates)\nModel in the First World Plaza shopping mall in Genting Highlands, Malaysia\nSatteldorf near Crailsheim, Germany. On the top of a company building 49°10′55.84″N 10°04′29.41″E﻿ / ﻿49.1821778°N 10.0748361°E\nApach, France, on the border with Germany and near the border with Luxembourg 49°27′59″N 06°22′18″E﻿ / ﻿49.46639°N 6.37167°E\nDa Lat, Vietnam. Designed to be used as Viettel telecommunications tower 11°56′14.12″N 108°26′18.58″E﻿ / ﻿11.9372556°N 108.4384944°E\nParis, Arkansas, US, at a park situated near the town's center, most likely standing at 25 feet (7.6 m) tall, but not confirmed.\nGuadalajara, Mexico - About 20 metres (66 ft) tall, on a church-esplanade, on Periférico avenue near the Barranca de Oblatos.\nModel next to the Napa County, California Superior Courthouse in Napa, California, US, built in France.\nSainshand, Mongolia. Painted pink, in the town center 44°53′31.52″N 110°8′19.05″E﻿ / ﻿44.8920889°N 110.1386250°E.\nCuliacán, Sinaloa, Mexico, Paris motel, on the road from Culiacán to Guamuchil 24°50′16″N 107°26′16″W﻿ / ﻿24.837769°N 107.437894°W\nEiffel Tower in Beijing World Park, Beijing, China near 39°48′34″N 116°16′52″E﻿ / ﻿39.809333°N 116.281°E\nAbout 2.5 metres (8.2 ft) tall forged sculpture in the Forged Figures Park in Donetsk, Ukraine. 48°00′59″N 37°48′03″E﻿ / ﻿48.016430°N 37.800898°E\nAn estimated 28 metres (92 ft) replica existed for a few weeks in Santa Clara, Cuba in 1895.\nThe Chinese Army trains on a smaller replica at Zhurire, China.\nLake Rawa Pening, Indonesia. A bamboo replica situated at the end of a 100 metres (330 ft) bamboo path on the lake. 7°16′33.7″S 110°26′57.8″E﻿ / ﻿7.276028°S 110.449389°E\nGettysburg, Pennsylvania, in the Devonshire Apartment Complex, which occupies the site of the former International Village tourist attraction. 39°45′48″N 77°16′03″W﻿ / ﻿39.7633038°N 77.2674908°W\nA bamboo replica of the Eiffel Tower at the Jaro Plaza in Jaro, Iloilo City, Philippines, was constructed to commemorate the inauguration of the original Eiffel Tower during the 1889 Paris Exposition. 10°43′29.0172″N 122°33′24.6168″E﻿ / ﻿10.724727000°N 122.556838000°E\nYekaterinoslavka, Khabarovsk Krai, Russia, 47°57′08″N 135°07′25″E﻿ / ﻿47.952315°N 135.123593°E\nCentre Français, Wedding, Berlin, Germany\nBrazil Rio Claro\nBrazil Barra World\nVelika Plana, Serbia, in a private front yard. 44°20′10″N 21°03′37″E﻿ / ﻿44.336126°N 21.060331°E\nImage gallery\nThese replicas are of unknown height.\nSee also: Media related to Replicas of the Eiffel Tower at Wikimedia Commons\nReplica of Eiffel Tower on factory building at Satteldorf near Crailsheim, Germany\nThe Eiffel Tower shape telecommunications tower in Da Lat, Vietnam\nReplica in Bloemfontein, South Africa\nWicker tower in Bussières-lès-Belmont, France 47°44′45″N 5°33′04″E﻿ / ﻿47.745918°N 5.551164°E\nModel at Centre Français de Berlin, Germany\nReplica of the Eiffel Tower in Sainshand, Mongolia\nSee also\nLattice tower\nReferences\n↑ Eiffel Tower Tour Guide\n↑ \"Reuters.com\". Reuters.com. February 9, 2009. Retrieved May 24, 2010.\n↑ lefigaro.fr. \"Le Figaro – Actualité en direct et informations en continu\". Lefigaro.fr. Archived from the original on December 20, 2016. Retrieved May 24, 2010.\n↑ Badkar, Matma (August 2, 2013). \"China Tried To Build A City To Replicate Paris ... And Here's What It Looks Like Now\". Business Insider. Retrieved September 30, 2013.\n↑ \"KI Mobile\". Visitkingsisland.com. Archived from the original on January 2, 2010. Retrieved May 24, 2010.\n↑ \"Eiffel Tower Bahria Town Karachi\". June 14, 2022. Archived from the original on September 29, 2022. Retrieved September 29, 2022.\n↑ \"Así es la nueva 'torre Eiffel paisa', ubicada en Sabaneta Antioquia\". KienyKe (in Spanish). Retrieved August 29, 2024.\n↑ \"París | Pulso Promotora\". pulsopromotora.com (in Spanish). Retrieved August 29, 2024.\n↑ \"Mais où est passée la Tour Eiffel de Fès ?\". franceinfo Culture (avec AFP) - franceinfo. December 6, 2016. Retrieved March 7, 2021.\n1 2 Buret, Florian (November 12, 2021). \"Exclusivité : EYFFELA est là !\". ludylab.fr (in French). Retrieved September 7, 2022.\n1 2 3 \"Eiffela : Réplique de la tour Eiffel\". Maindron Production (in French). Retrieved September 29, 2022.\n↑ \"מבלים בנתיבות, מרגישים בפריז\". B7Net. Retrieved August 27, 2021.\n↑ \"Netivot's Eiffel Tower\". explanders.com. March 12, 2022. Retrieved September 29, 2022.\n↑ Parque Europa\n↑ Lauren Frayer, \"As Europe Goes, So Go Its Fake Monuments\", NPR, June 2, 2012\n1 2 3 \"Copies, replicas and reproductions of the Eiffel Tower in Brazil\".\n1 2 \"Realt.by в деревне. Часть 2. Белорусский Париж со своей Эйфелевой башней и деревня Мосар с \"зоной трезвости\" при костеле Святой Анны\". realt.by (in Russian). Retrieved May 29, 2021.\n↑ \"Tower model at Filiatra\". Users.mes.sch.gr. March 22, 2001. Retrieved May 24, 2010.\n↑ Photograph of Filiatra tower Archived May 28, 2010, at the Wayback Machine\n↑ \"\"Ομοίωμα του Πύργου του Άιφελ εστήθη εις τα Φιλιατρά\" \"Eiffel Tower replica placed in Filiatra\"\". Newspaper Eleftheria, p.4. August 6, 1960.\n↑ Disney's official French Pavilion page Archived 2009-01-21 at the Wayback Machine — lists the Eiffel Tower as approximately 1/10 the height of the original.\n↑ \"W Rybnickim Paryżu stanęła Wieża Eiffla\". Rybnik.eu. Retrieved September 1, 2026.\n↑ Kabardinka builds own Eiffel Tower (in Russian)\n↑ Minimundus map Archived 2016-02-02 at the Wayback Machine, accessed on line Oct. 8, 2015.\n↑ \"Eiffel Tower\". Dalefield.com. Retrieved May 24, 2010.\n↑ \"Eternizados em praça pública\". August 8, 2010.\n↑ \"The official Grand Départ of Tour de France in Denmark in 2022\". June 27, 2022.\n↑ White, Patrick (July 7, 2009). \"We'll always have Paris, even in Saskatchewan\". The Globe and Mail. The Globe and Mail Inc. Archived from the original on October 3, 2011. Retrieved March 29, 2011.\n↑ \"Эйфелева башня / Форум города Валдай / Валдай\". valday.com. Retrieved May 26, 2020.\n↑ В Воронеже возникла своя Эйфелева башня // Аргументы и факты\n↑ \":: Falconcity of Wonders (L.L.C) ::\". Falconcity.com. Retrieved May 24, 2010.\n↑ First World Plaza Archived 2011-07-22 at the Wayback Machine. Retrieved on 2008-09-13\n↑ Napa Courthouse Flag Staff [permanent dead link].\n↑ \"Alles nur geklaut: Wie China sich die Welt nachbaut\". March 9, 2017.\n↑ \"La torre Eiffel de Santa Clara\". March 31, 2019. Archived from the original on October 17, 2021. Retrieved April 7, 2019.\n↑ \"China's Largest Base Has Replicas of Taiwan's Presidential Building, Eiffel Tower\". May 27, 2020.\n↑ \"Ada Menara Eiffel dari Bambu yang Mengapung di Rawa Pening\". August 16, 2020.\n↑ \"The weird and wonderful world of Eiffel Tower replicas and derivatives - Geoguessr\". March 11, 2021.\n↑ \"Gettysburg Times Newspaper Archives, Apr 26, 1974, p. 11\". April 26, 1974.\n↑ \"Eiffel Tower In Iloilo? - The Philippines Today\". March 18, 2024. Retrieved August 31, 2024.\n↑ : 2GIS digital map\n↑ See picture\n↑ \"Blic Žena: \"Žena je poželela da ide u Pariz, a muž joj je OVAKO ISPUNIO ŽELJU\"\". May 25, 2021.\nExternal links\nMedia related to Replicas of the Eiffel Tower at Wikimedia Commons\nRetrieved from \"https://en.wikipedia.org/w/index.php?title=Eiffel_Tower_replicas_and_derivatives&oldid=1381581463\"\nCategories:\nReplicas and derivatives of the Eiffel Tower\nLists of replicas\nHidden categories:\nArticles with short description\nShort description is different from Wikidata\nUse mdy dates from September 2025\nPages using gadget WikiMiniAtlas\nCS1 Spanish-language sources (es)\nCS1 French-language sources (fr)\nCS1 Russian-language sources (ru)\nWebarchive template wayback links\nAll articles with dead external links\nArticles with dead external links from August 2025\nArticles with permanently dead external links\nCommons category link is on Wikidata\nCommons category link from Wikidata"
+  }
+ ],
+ "notes": [],
+ "trace": {
+  "run_id": "68eb070d9b8d",
+  "mode": "live",
+  "recorded_at": "2026-11-03T11:43:20+00:00",
+  "backend": "extractive-no-llm",
+  "model": null,
+  "gpu": null,
+  "gpu_source": null,
+  "inference_on_amd": false,
+  "tokens": {
+   "prompt": null,
+   "completion": null
+  },
+  "wall_ms": 3870,
+  "pages_fetched": 1,
+  "limits": {
+   "max_pages": 5,
+   "max_steps": 40,
+   "max_redirects": 4,
+   "max_bytes": 2000000,
+   "max_robots_bytes": 500000,
+   "max_text_chars": 120000,
+   "max_links": 300,
+   "connect_timeout": 5.0,
+   "read_timeout": 8.0,
+   "per_fetch_seconds": 10.0,
+   "request_seconds": 25.0,
+   "per_host_delay": 0.4,
+   "max_llm_calls": 8,
+   "max_revisions": 2
+  },
+  "steps": [
+   {
+    "type": "robots",
+    "url": "https://api.wikimedia.org/robots.txt",
+    "status": 200,
+    "note": "parsed",
+    "n": 1,
+    "t_ms": 1327
+   },
+   {
+    "type": "search",
+    "url": "https://api.wikimedia.org/core/v1/wikipedia/en/search/page?limit=3&q=Eiffel%20Tower%20completed",
+    "provider": "Wikimedia search API",
+    "query": "Eiffel Tower completed",
+    "results": [
+     "https://en.wikipedia.org/wiki/Eiffel_Tower_replicas_and_derivatives",
+     "https://en.wikipedia.org/wiki/Eiffel_Tower",
+     "https://en.wikipedia.org/wiki/Eiffel_%28company%29"
+    ],
+    "n": 2,
+    "t_ms": 2318
+   },
+   {
+    "type": "robots",
+    "url": "https://en.wikipedia.org/robots.txt",
+    "status": 200,
+    "note": "parsed",
+    "n": 3,
+    "t_ms": 2948
+   },
+   {
+    "type": "fetch",
+    "url": "https://en.wikipedia.org/wiki/Eiffel_Tower_replicas_and_derivatives",
+    "final_url": "https://en.wikipedia.org/wiki/Eiffel_Tower_replicas_and_derivatives",
+    "status": 200,
+    "bytes": 441547,
+    "chars": 23077,
+    "truncated": false,
+    "sha256": "42b96aab9a6aceccaca227370a4f1416a1ce18752ae9e32d95062909121a4ece",
+    "title": "Eiffel Tower replicas and derivatives - Wikipedia",
+    "ms": 1543,
+    "n": 4,
+    "t_ms": 3861
+   },
+   {
+    "type": "select_sentences",
+    "method": "keyword overlap weighted by rarity",
+    "candidates": 96,
+    "chosen": [
+     {
+      "score": 1.03,
+      "url": "https://en.wikipedia.org/wiki/Eiffel_Tower_replicas_and_derivatives"
+     }
+    ],
+    "n": 5,
+    "t_ms": 3869
+   },
+   {
+    "type": "verify",
+    "source_url": "https://en.wikipedia.org/wiki/Eiffel_Tower_replicas_and_derivatives",
+    "verified": true,
+    "match": "exact",
+    "reason": "ok",
+    "injected_for_demo": false,
+    "n": 6,
+    "t_ms": 3869
+   }
+  ],
+  "generated_by": {
+   "tool": "trailmark.record",
+   "version": "0.1.0",
+   "git_commit": "a4b91c9",
+   "platform": "macOS-15.7.4-arm64-arm-64bit"
+  },
+  "gpu_vram_after_run": null
+ }
+}

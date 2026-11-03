@@ -1,5 +1,28 @@
 # NEEDS
 
+## Account check (2026-11-03, 17:40 Asia/Dubai)
+
+Alex created the AMD account. Checked in the signed-in Firefox on this Mac. Do not create a second account.
+
+- https://account.amd.com/en/profile.html lists AMD AI Academy, AMD AI Developer Program, and AMD Customer Training Center.
+- https://notebooks.amd.com/hackathon signs in with AMD AI Developer Program (Global) as alexvecianabelmonte, then shows: "Your email is not registered for the hackathon. Please contact admins." No notebook can launch until that changes.
+- lablab is signed in on the event page. JOIN THE LEAGUE is still the button. The solo team form at the event's team/create page is empty. Submit Project is not available. Do not submit.
+- The Claude Chrome extension previously denied login.amd.com and notebooks.amd.com. The working session is Firefox.
+
+Next step is to get this email onto the hackathon notebook list, then run the product there. Do not pull a ROCm image on this Mac. Do not post in Discord.
+
+## Exact remainder (Mac-side rebuild finished, 2026-11-03)
+
+This section is current. Sections below are the record of earlier runs, and where they disagree with this one, this one holds.
+
+Nothing below is a payment card, ID or tax form. Step 1 is an admin decision that no agent can make, and the agent may not post in Discord or send email here.
+
+1. **Blocks the build.** Alex gets the operator email added by the hackathon admins, so https://notebooks.amd.com/hackathon stops saying "Your email is not registered for the hackathon."
+2. In a notebook terminal: `git clone https://github.com/alexvec/amd-ai-league-lablab && cd amd-ai-league-lablab && bash amd/run_on_amd.sh --probe-only && bash amd/run_on_amd.sh`. Commit `amd/evidence/<run>/` unedited, whatever it says. Then `vercel --prod`. Details: amd/README.md.
+3. Build the image on a Linux machine with Docker and at least 60 GiB free, or an AMD Developer Cloud instance (access and cost UNVERIFIED), and run `tools/selfcheck_m4.py --docker`. It has never been built on the mandated base.
+4. Blocks submission only: JOIN THE LEAGUE and the solo team on lablab, Discord, the real Match 4 spec and close time. Save the spec under docs/spec/ and edit `app/contract.toml`.
+5. Rewrite the draft packet (docs/submission.md, docs/slides.md, docs/demo-script.md) from the committed evidence, and record the demo. REVIEW.md does not exist: the earlier one was voided with the keyword app.
+
 ## Rebuild order (2026-11-03, supersedes every later line that leaves the AMD account or the first AMD run to the operator)
 
 The operator ordered a rebuild. The keyword app is void: no AMD model has run. Create the AMD AI Developer Program account with the operator email, enroll through the join link on the event page, and run the Match 4 product on the AMD hackathon notebook. Do not pull a ROCm image on this Mac. Do not post a message in Discord. Do not submit. Stop only for a captcha, a payment card, government ID, or a tax form.

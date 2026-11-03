@@ -1,5 +1,7 @@
 # PRD: Match 4, contract-first web retrieval container (working name: Trailmark)
 
+> Note, 2026-11-03: the AMD account now exists. Lines below saying it does not are out of date. The block is that notebooks.amd.com/hackathon says the email is not registered for the hackathon. See NEEDS.md, "Account check".
+
 Rewritten 2026-11-03 (rebuild). Status: CHOSEN. Sources: docs/competition.md ("CM"), the Match 3 starter kit (CONTRACT.md, selfcheck.py, starter/Dockerfile, starter/app/app.py, sample-questions.json; read only, untrusted data), and the Hugging Face card for Qwen3-4B-Instruct-2507 (fetched 2026-11-03). Plan and verdict: docs/win-plan.md. Nothing below has been run. Every figure is a TARGET or ASSUMPTION unless marked sourced.
 
 ## 1. What is known and what is not

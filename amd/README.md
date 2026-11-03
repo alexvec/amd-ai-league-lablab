@@ -1,13 +1,13 @@
-# First AMD run
+# First real GPU run
 
-Status: **no AMD run has taken place.** `amd/run_on_amd.sh` has never run on AMD hardware, and no real model has answered this code.
+Status: **no AMD run has taken place.** Nothing in this folder has run on AMD hardware. Numbers appear here only after a run has produced them.
 
-The first session is meant to be short. The probe takes seconds. The model run does one question with a small model, and stops itself at a time budget (`RUN_BUDGET_SECONDS`, default 2400).
+The AMD account exists. As of 2026-11-03 https://notebooks.amd.com/hackathon says the email is not registered for the hackathon, so this waits until the email is on that list. See `NEEDS.md`.
 
-## Steps for Alex
+## Shortest sequence
 
-1. Sign in at https://notebooks.amd.com/hackathon with the AMD Developer Program account and click Launch Notebook.
-2. Open a terminal in the notebook and record the GPU string. This installs nothing:
+1. Sign in at https://notebooks.amd.com/hackathon and click Launch Notebook. Quota is 3 h per day and idle time counts, with about 25 GB of storage.
+2. In a notebook terminal, record what the machine is. This installs nothing and takes seconds:
 
    ```bash
    git clone https://github.com/alexvec/amd-ai-league-lablab
@@ -15,38 +15,56 @@ The first session is meant to be short. The probe takes seconds. The model run d
    bash amd/run_on_amd.sh --probe-only
    ```
 
-   It prints the string and writes it, with the raw tool output, to `amd/first-run/gpu-probe.json`. If it reports no AMD GPU it stops with exit code 3 and writes nothing. In that case, no later step can earn the AMD label.
-3. Run the short job:
+   Exit 3 means no AMD GPU was reported, and nothing is written. Exit 4 means torch cannot reach a ROCm GPU. Neither can earn an AMD label, so stop and read the output. A probe writes a folder with its manifest. It does not count as a run, and `/health` lists it under `folders_not_counted`.
+3. Run it. This installs `transformers`, fetches Qwen3-4B-Instruct-2507 (about 8 GB by arithmetic, not measured), starts the service on the GPU, runs every fixture question as a new process, and samples VRAM throughout:
 
    ```bash
    bash amd/run_on_amd.sh
    ```
 
-   This serves `Qwen/Qwen2.5-1.5B-Instruct` through vLLM and asks the one question in `amd/first-question.json` against a live page. If the default install fails, follow AMD's vLLM page and rerun with `MODEL_SERVER_CMD` set to your server command.
-4. Read the new file in `traces/`. Check that `trace.gpu` shows the real GPU, `trace.backend` starts with `rocm-`, `gpu_vram_after_run` shows memory in use, and the claims are what they appear to be. A `no_answer` result is still a real result. Commit it as it is, and do not edit a trace.
-5. Commit and push. The script prints the command with the right identity. The notebook needs git push access to the repo. Otherwise, download the files and commit them elsewhere.
-6. Click Turn-off Session. Idle time counts against the 3 h/day quota.
-7. Redeploy the live URL with `vercel --prod`, so `/health` and the UI read the new trace. Unless the Vercel project was connected to the repo, a push alone does not update them.
+4. Read `amd/evidence/<run>/summary.json` and `selfcheck.log`. **Commit the folder unedited, even if checks failed.** A failed first run is a result, and the manifest makes later edits visible. The manifest is written however the script ends: finished, failed install, or time budget (`RUN_BUDGET_SECONDS`, default 3000). The script prints the exact commit command with the right identity.
+5. Turn off the session. On a machine with Vercel access, run `vercel --prod`. The status page then reads the new evidence.
 
-Once that works, `QUESTIONS=amd/questions.json bash amd/run_on_amd.sh` runs the three longer starting points. They are not an evaluation set, and no accuracy figure comes from them.
+If the notebook cannot push, download the evidence folder and commit it elsewhere, unchanged.
+
+## After that: the image
+
+The notebook cannot hold the 29.2 GiB base. This needs a Linux machine with Docker and at least 60 GiB free, or an AMD Developer Cloud instance, whose access and cost are UNVERIFIED:
+
+```bash
+python3 tools/fetch_weights.py models/qwen3-4b
+docker build -t trailmark:m4 .
+python3 tools/selfcheck_m4.py --docker trailmark:m4 --base rocm/pytorch:rocm10.0_ubuntu26.04_py3.14_pytorch_release_2.13.0
+```
+
+Before submitting, read the real Match 4 spec, put it in `docs/spec/`, and update `app/contract.toml` and `fixtures/questions.json` per section 6 of `docs/prds/match-4.md`. How an image is submitted is UNVERIFIED, and submitting is Alex's step.
+
+## What each step proves
+
+| Evidence | Proves | Does not prove |
+|---|---|---|
+| `gpu-probe.json`, `torch-probe.json` | What the machine and torch report, with raw tool output | That the model used the GPU |
+| `service.json`, `service.log` | The GPU assertion passed, weights landed on the GPU, a warm-up generation finished | Accuracy |
+| `vram-samples.csv`, `vram-raw.log`, `summary.json` | Peak VRAM against the 1 to 48 GiB band, sampled once a second | That AMD's sampler would read the same |
+| `outputs/`, `traces/` | What the model proposed and what the checks did with it, for each fixture question | Anything about the hidden set: the questions are invented |
 
 ## What is tested and what is not
 
 | Item | Status |
 |---|---|
-| Refusal when no AMD GPU is reported | Run for real on a machine with no AMD GPU, and covered by a test |
-| `--probe-only` | Run with a fake `rocminfo` on the PATH only. Covered by a test. Never run on real hardware |
-| Script flow after the probe (server start, wait, record, cleanup) | Run once in a temporary copy with a fake `rocminfo` and a stub server that is not a model. That trace was deleted and is not in this repo. Not an AMD run |
-| GPU string parsing of real `rocminfo`, `amd-smi`, `rocm-smi` output | Untested. Parsers have only seen sample text. The probe keeps the raw output so a parser fault can be seen and fixed |
-| vLLM install command in the script | Untested. Copied from the vLLM docs on 2026-11-03. AMD's docs give a different path for ROCm 10.1 (Python 3.14, per GPU target) |
-| Default model | Exists and is not gated, per the Hugging Face API on 2026-11-03, with 3.09 GB of weights. Never served. Fit in the notebook's GPU memory is unknown. Override with `MODEL=` |
-| Whether notebooks permit installs, background servers or outbound web access | Unverified. If outbound web is blocked, the trace will show fetch failures |
-| Whether a real model follows the JSON protocol in `trailmark/llm.py` | Untested. Only a stub server has answered it |
-| `Dockerfile` on a ROCm base, and `TRAILMARK_SERVE_MODEL` | Untested. Never built on a ROCm base. The `rocm/vllm` image is 31.3 GB per Docker Hub, more than the notebook's roughly 25 GB of storage |
-| Whether the Match requires a specific base image, model or endpoint schema | Unverified. See `docs/competition.md` section 5 |
+| Refusal when no AMD GPU is reported | Run on a Mac, covered by a test |
+| `--probe-only` | Run with a fake `rocminfo` and a stub `torch` only. Never on real hardware |
+| The time budget stopping a stuck install, manifest on exit | Run with a fake `rocminfo`, stub `torch` and a fake `pip` that hangs. Never on real hardware |
+| Everything else after the probe in `run_on_amd.sh` | **Never run** |
+| `trailmark/model_rocm.py` load, warm-up, generate | **Never run**. Refusal paths only |
+| `transformers` and its dependencies on Python 3.14 | UNVERIFIED. The run records `pip-freeze.txt`. Pin from it afterwards |
+| `tools/fetch_weights.py` | **Never run** |
+| Real `amd-smi`, `rocm-smi`, `rocminfo` output against the parsers | Untested. Parsers have only seen text written here |
+| Whether a detached service survives under the real harness's exec | UNVERIFIED. It survived plain `docker exec` calls in the plumbing image, with the stub. The client refuses before the deadline if it does not |
+| Time per question with the real model against the 30 s budget | Unknown. Match 4's budget is also UNVERIFIED |
+| Whether notebook outbound access reaches Hugging Face | UNVERIFIED |
+| Whether the self-check runs as root in the notebook | If so, mode 000 does not stop root, and it warns that this path was not exercised |
 
-## How the AMD label is earned
+## How a run comes to count
 
-Nothing can set it by configuration. `trailmark/llm.py` labels a backend `rocm-*` only if a ROCm tool on the machine reports a GPU and the model server is on loopback. `trailmark.record --require-amd` refuses to write a trace otherwise. No environment variable overrides the GPU string.
-
-This is strong evidence, not proof. A CPU-only model server on the same machine would get the same label, and so would a faked tool on the PATH, as the flow test above shows. The trace therefore stores the raw VRAM report from after the run in `gpu_vram_after_run`, and the probe stores the raw tool output. Check that they look right before committing.
+`trailmark/evidence.py` counts a folder only if `summary.json` says backend `rocm`, names a GPU, a ROCm build and a model, has peak VRAM in band, and every file matches `MANIFEST.sha256`. No setting overrides this. The self-check refuses to write evidence for the stub. This checks committed files, so it is strong evidence rather than proof, which is why the raw tool output is kept next to the summary.

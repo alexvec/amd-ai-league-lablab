@@ -1,5 +1,7 @@
 # Win plan: AMD AI League (lablab.ai), Match 4 rebuild
 
+> Note, 2026-11-03: the AMD account now exists. Lines below saying it does not are out of date. The block is that notebooks.amd.com/hackathon says the email is not registered for the hackathon. See NEEDS.md, "Account check".
+
 Rewritten 2026-11-03 on the operator's rebuild order. Rule book: docs/competition.md (cited as "CM", with its section names). Product spec: docs/prds/match-4.md. Nothing here was registered, signed in, posted or submitted. Anything not sourced in CM or the Match 3 kit is marked UNVERIFIED, TARGET or ASSUMPTION. No result in this plan has been measured.
 
 ## 0. Verdict, stated plainly

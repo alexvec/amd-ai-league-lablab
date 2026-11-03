@@ -1,66 +1,51 @@
+> **DRAFT, pending the AMD run.** No real model and no AMD GPU has run this code. Nothing here has been submitted. Alex reviews and submits. A submission now would be an entry with no AMD inference in it.
+
 # Submission text: Trailmark (AMD AI League, Match 4)
 
-Prepared 2026-11-03. Nothing here has been submitted. Alex reviews and submits.
-
-## Read this first
-
-Per the event's partner focus, submitting before the AMD run would be a weak entry. Today no AMD inference has happened and `recorded_amd_runs` is 0. The partner technology does no work in the entry yet. Whether to submit now or after the notebook run is Alex's decision. The default text below is version (a), which is true today.
-
 - Repo: https://github.com/alexvec/amd-ai-league-lablab
-- Live: https://amd-ai-league-lablab.vercel.app
+- Status page: https://amd-ai-league-lablab.vercel.app
 - Track: Match 4, Intelligent Web Information Retrieval (working name Trailmark)
 
 ## Field limits used
 
-Generic lablab form limits from docs/competition.md section 5: title 5-50, short description 50-255, long description 600-2,000 characters. Source: lablab's delivery and rules pages. UNVERIFIED for Match 4: the rule book found no Match 4 page, and the event form takes priority. Re-read the live form before pasting. Counts below were measured on the exact lines in this file (plain ASCII, spaces counted, no line breaks inside a field).
+Generic lablab form limits from docs/competition.md section 5: title 5-50, short description 50-255, long description 600-2,000 characters. UNVERIFIED for Match 4. The event form takes priority, and the evaluator may want an image rather than text. Counts below were measured on the exact text in this file.
 
-## Title (42 characters, limit 5-50)
+## Title (50 characters)
 
-Trailmark: web answers with checked quotes
+Trailmark: one value, only the pages that prove it
 
-## Short description (203 characters, limit 50-255)
+## Short description, true today (195 characters)
 
-Ask for one fact from the web. Trailmark reads real pages and quotes the source for each claim. A plain program checks each quote is on the fetched page. The live demo uses a keyword backend, not an LLM.
+A contract-shaped CLI for Match 4: finds one value on a set of web pages, cites only the pages that prove it, returns nothing otherwise. Draft: no real model and no AMD GPU has run this code yet.
 
-## Long description, version (a), true today (1,294 characters, limit 600-2,000)
+## Long description, true today (1268 characters)
 
-Trailmark is an agent for Match 4. You ask a question in plain language, optionally with a start URL. It fetches pages through a guarded fetcher (http and https only, private addresses refused, robots.txt respected, capped pages and time), stores a snapshot with its SHA-256, and follows links. A backend drafts claims, each with a quote and a source URL. A plain-code verifier checks that each quote appears in the stored text of a page fetched in that run. Exact and whitespace-normalised matches pass. Case is never folded, nothing is fuzzy-matched, and a number in a claim must also appear in its quote. The answer is built only from claims that passed. The limit: a verified quote is really on the page, but it may not answer the question. Status today: the live demo runs extractive-no-llm, a keyword-based backend with no language model, on Vercel. An LLM backend for an OpenAI-compatible server on ROCm is written and tested against a stub only. No AMD run has taken place, no real model has answered this code, the container has never been built, and evaluator acceptance is unknown. There are no accuracy figures. MIT licence, 184 offline tests passing on the build machine. Code was written with substantial help from Anthropic's Claude via Claude Code, under the author's direction.
+Trailmark is a command-line program for an evaluator to exec, built to the container contract in the official Match 3 kit. The Match 4 interface is unpublished, so its assumptions sit in one config file. An index pass walks a page source (a saved mirror by default, HTTP through a guarded fetcher second), catches failures per page, builds a lexical index and starts one resident model service on a unix socket. Each question is a new short-lived process that never imports torch. The model proposes values with verbatim spans. Plain code decides: the span must be on the stored page, pages that disagree are settled by withdrawn markers, revision labels and dates or the program refuses, and citations come from a necessity test that removes pages one at a time. A refusal is an empty answer with empty citations. Status: no real model and no AMD GPU has run this code. The intended model, Qwen3-4B-Instruct-2507 on ROCm, has never loaded. The image on the mandated base has never been built. The tests use a scripted stub on an invented fixture site, and the stub only tests plumbing. There are no accuracy, speed or memory figures. The code is MIT licensed and was written with substantial help from Anthropic's Claude via Claude Code, under the author's direction.
 
 ## AMD statement
 
-### (a) True today. This is the default. Use it.
+### True today. This is the default.
 
-No AMD inference has happened in this entry. The live URL runs on Vercel with a backend that uses no language model. The ROCm path (an open-weight model served on an AMD GPU) is written but has not been run on AMD hardware.
+No AMD inference has happened in this entry. The status page runs no model. The ROCm path is written and has never run. The email is not yet registered for the hackathon notebook.
 
-### (b) Template for after Alex's notebook run. Do NOT use until every blank is filled from the committed trace.
+### Template for after a real run. Do NOT use until every blank is filled from the committed folder.
 
-Fill each blank from the new file in `traces/`, copying what the trace says. Leave a blank blank if the trace does not have the value, and then delete the sentence.
+Fill each blank from `amd/evidence/<run>/summary.json`, copying what it says. If it has no value for a blank, delete the sentence.
 
-> On [DATE FROM trace.recorded_at], Trailmark's LLM backend answered [NUMBER] question(s) in an AMD notebook. The trace reports the GPU as [GPU STRING FROM trace.gpu] and the backend as [trace.backend]. The model was [MODEL FROM trace.model], served by [SERVER AND VERSION]. The run took [MEASURED WALL TIME] and used [MEASURED TOKEN COUNT]. Result: [status, and verified claims out of total claims, copied from the trace]. This is one recorded run, not an evaluation. The live URL on Vercel is [STILL NOT / NOW, per /health] on AMD hardware.
+> On [DATE OF THE RUN], [MODEL] ran on [GPU] with ROCm [HIP], in the notebook session, through this project's own self-check on [FIXTURE TOTAL] questions it invented. Peak VRAM from [VRAM TOOL] was [PEAK] GiB. [FIXTURE CORRECT] of [FIXTURE TOTAL] matched. This is one run in our own harness, not AMD's evaluator, and says nothing about the hidden set. The evidence is committed at [PATH].
 
-Before using (b), also check that `gpu_vram_after_run` in the trace shows memory in use, as amd/README.md says. Then redeploy so `/health` reads the new trace.
+Then rewrite the short and long descriptions, since their status sentences will have changed.
 
 ## AI-tool disclosure (Code of Conduct Rule 13)
 
-This project's code, tests and documentation were written with substantial help from Anthropic's Claude, through Claude Code, under Alex Veciana Belmonte's direction. No third-party agent framework is used. The default backend of the live demo uses no AI model. These submission texts were also drafted with Claude.
-
-## Suggested form extras (Alex's choice)
-
-- Categories and technologies: not verified for this event. Safe, true tags today: Python, FastAPI, Vercel, web retrieval. Add ROCm or AMD only after version (b) is true.
-- Cover image: Alex's choice. None has been made in the repo.
-- Video: MP4 or MOV, up to 300 MB, recommended under 5 minutes (generic limits, UNVERIFIED for Match 4). Script: docs/demo-script.md.
-- Slides: export docs/slides.md to PDF.
-- Demo application URL: https://amd-ai-league-lablab.vercel.app
+This project's code, tests and documentation were written with substantial help from Anthropic's Claude, through Claude Code, under Alex Veciana Belmonte's direction. No third-party agent framework is used. Claude takes no part in answering questions at run time. These submission texts were also drafted with Claude.
 
 ## Alex must confirm before submitting
 
-1. Match 4 is still live and its close time (Discord; not stated on the event page).
-2. The Match 4 form fields and limits match the generic ones above, and whether it asks for a container, a URL, or both.
-3. Whether to wait for the AMD run. See the top of this file.
-4. AMD Developer Program account, lablab enrolment and Discord membership are done (see NEEDS.md).
-5. The repo is public and the MIT LICENSE is in place.
-6. The live URL still responds and `/health` still says what the text says. If a new trace was added, redeploy first.
-7. The test count (184) still holds: run `.venv/bin/python -m pytest`.
-8. The recorded video shows the backend honestly (see docs/demo-script.md).
-9. Production check by Alex: for the RFC 2119 page, the question "What does MUST NOT mean?" returned verified quotes about MUST and SHOULD instead of MUST NOT. This is not in a committed trace. Keep the limit sentence in the long description.
-10. Evaluator acceptance is unknown. Do not claim it.
+1. A real run is committed, and this file has been rewritten from it.
+2. Match 4 is still live, and its close time (not stated on the event page).
+3. How Match 4 takes a submission: image, form, or both. UNVERIFIED.
+4. The real Match 4 spec has been read and `app/contract.toml` matches it.
+5. The AMD Developer Program account (exists), lablab enrolment and Discord membership are done. See NEEDS.md.
+6. `/health` still says what the text says. If a new folder was committed, redeploy first.
+7. Evaluator acceptance is unknown. Do not claim it.

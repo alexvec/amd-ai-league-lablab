@@ -1,75 +1,60 @@
-# Demo script: Trailmark (about 4:30)
+> **DRAFT, pending the AMD run.** No real model and no AMD GPU has run this code. The recording this entry needs does not exist yet. Part 2 can only be recorded after a real run. Nothing here has been recorded or uploaded.
 
-For Alex to record himself against https://amd-ai-league-lablab.vercel.app. Target 4:30 and stay under 5:00 (the generic form recommends under 5 minutes; UNVERIFIED for Match 4). Steps follow docs/demo-path.md. Nothing is uploaded or posted by anyone but Alex.
+# Demo script: Trailmark
+
+For Alex to record himself. The generic lablab form recommends under 5 minutes (UNVERIFIED for Match 4). Steps follow docs/demo-path.md.
 
 ## Rules for the recording
 
-- The live URL runs `extractive-no-llm`, a keyword backend with no language model. Never call it an LLM, an AI model, or AMD.
-- A replay is a replay. Say "replay" when it is on screen.
-- Do not show or say any GPU output unless it comes from a committed trace of a real AMD run.
-- Fetches are live, so the pages can change. Do a dry run first. If a result differs from what is written here, narrate what is on screen.
-- Alex chooses any further questions at record time and tests them first. This script only uses the questions whose outcomes are in docs/demo-path.md or a committed trace.
-- Optional record settings from docs/demo-path.md: `--headed --slow-mo 600 --video-dir demo-recordings` with scripts/walk_demo.py. A screen recording by hand also works.
+- Show only output produced on screen in that take. No output is written into this script in advance, except the fixed lines the self-check prints.
+- The stub is called a stub. It is never called a model, and nothing it does is described as AMD work.
+- Fixture questions are invented. They are never presented as the Match's questions or as accuracy.
+- Do not show or say a GPU name, a VRAM figure, or a time per question unless it comes from a committed folder in `amd/evidence/`.
 
-## Script
+## Part 1: true today. Use this until a run is committed.
 
-### 0:00 to 0:30. Problem (on slide 2 or the top of the live page)
+### The job (on the status page)
 
-Say: "If you need one fact from the web and you have to defend it, an answer without a source is not enough. Trailmark goes to a page, answers, and shows the exact quote behind every claim. Then a plain program checks that each quote is really on the page it fetched."
+Open https://amd-ai-league-lablab.vercel.app.
 
-### 0:30 to 1:00. Be upfront about the backend (step 1: open the page)
+Say: "This is the status page for a command-line program, not the product itself. An evaluator gives the program a question. It has to find the one value on a set of pages that answers it, name only the pages that prove it, and return nothing if they do not."
 
-Click: open the live URL. Point at the header: backend, model, deployment, AMD statement.
-Say: "The header is read from the server's health report. This deployment runs a keyword-based backend with no language model, on Vercel. It does not run on AMD hardware, and no AMD run has taken place yet. I will come back to that."
+### The state (status page, then /health)
 
-### 1:00 to 2:00. The product on real input (step 2)
+Point at the statement at the top, then open `/health`.
 
-Click: "Fill in an example" (fills "What does the key word MUST mean?" and the RFC 2119 URL), then "Find it".
-Show: the answer, each claim marked Verified, the quote highlighted in the stored page. Scroll the Trace panel: robots check, fetch with SHA-256, sentence selection, verify steps.
-Say: "This is a real fetch of a real page. The page is stored with its hash. Every claim carries a quote, and the quote is highlighted at its position in the stored text."
+Say: "No AMD run has taken place. No real model has run this code. This page reads the evidence folder on every request, and recorded runs is zero. The hackathon notebook has not accepted my email yet, so that is the next step."
 
-### 2:00 to 2:40. What the check does and does not prove (same result)
+### The plumbing (terminal)
 
-Show: the claims returned. In the committed trace for this question there are three: the MUST definition, a sentence about the boilerplate phrase, and the definition of SHOULD. Confirm that is what you see.
-Say: "Look at what 'verified' means. The first claim answers the question. The other two are real quotes that are on the page, but they are only partly relevant. The check proves a quote is on the page. It does not prove the quote answers the question. This backend picks sentences by keywords, so it can return a real sentence that does not answer. That is the limit, and I would rather show it than hide it."
+Run `.venv/bin/python tools/selfcheck_m4.py --local`.
 
-Optional, only if Alex has tested it and it did not come out well on the live site: show the "What does MUST NOT mean?" question on the same page, which in a production test returned verified quotes about MUST and SHOULD. Do not script an outcome you have not seen on the day.
+Say: "This runs the whole CLI with a scripted stub standing in for the model. The stub only tests plumbing. Its replies are written by hand, including some deliberately wrong ones."
 
-### 2:40 to 3:10. The failure case (step 3)
+Point at step 3. Say: "A file nobody can read, a corrupt PDF, a binary and an empty directory are recorded, and the page sorted after them is still indexed."
 
-Click: tick "Failure demo", then "Find it" again.
-Show: one quote comes back "Unverified, removed from the answer", labelled "Altered by the demo switch", and its text is not in the answer.
-Say: "I altered one quote on purpose before the verifier saw it. The verifier rejected it and the answer was built without it. Backends cannot mark their own claims verified."
+Point at step 6. Say: "Given those scripted candidates, the plain-code checks reject the withdrawn value, drop a page that only repeats the answer, keep both pages of a two-hop chain, and refuse exactly when the answer sits in a page it could not read. That shows what the checks do, not what a model would do."
 
-### 3:10 to 3:30. A refused URL (step 4)
+Point at the last line. Say: "It says plumbing checks passed, no AMD GPU, no evidence. That line is the most this machine can print."
 
-Click: replace the start URL with `http://169.254.169.254/latest/meta-data/`, then "Find it".
-Show: the refusal.
-Say: "This endpoint fetches addresses from strangers, so it refuses private and metadata addresses and fetches nothing."
+### Close
 
-### 3:30 to 3:50. Replay (step 5)
+Say: "The code is MIT licensed, and was written with substantial help from Claude through Claude Code. Who would pay for this outside the Match is a hypothesis, with no customers or pilots behind it."
 
-Click: choose a run in the replay list, then Replay.
-Show: the notice that this is a replay, with its recording date and the backend that produced it.
-Say: "This is a replay of a recorded run, not a live fetch. No page is fetched. The verifier re-checks the stored snapshot. Both recorded runs here are from the keyword backend."
+## Part 2: RECORD ONLY AFTER a real run is committed
 
-### 3:50 to 4:10. Why the partner technology matters (choose ONE version)
+Do not record this from anything other than a real GPU session. Leave out anything the run did not show.
 
-Version A, true today. Use this one unless the AMD run is done and committed.
-Say: "The design is for an open-weight model, served on AMD GPUs through ROCm, to plan the navigation, choose links and write the claims, with this verifier checking its output. That part is written and tested against a stub only. It has not run on a real model, and it has not run on AMD hardware. So today the partner technology is the plan, not a result."
-
-Version B. RECORD ONLY AFTER the notebook run, with the new trace committed and deployed. No fake output: show only what is on screen from the real run.
-Click: choose the new AMD trace in the replay list, then Replay. Open the trace panel.
-Say (fill from the trace, leave out anything it does not show): "This is a replay of a run recorded on [GPU string shown in the trace], with [model shown in the trace], backend [backend shown in the trace]. It answered [N] question(s), with [verified claims out of total] verified. It took [measured time]. This is one run, not an evaluation."
-Then say: "The live site itself is [still not / now] on AMD hardware, as its header says."
-
-### 4:10 to 4:30. Who pays, and what is next
-
-Say: "Who pays is a hypothesis I have not validated: teams that need auditable web research, such as analysts, compliance staff and journalists, might pay for answers with checkable evidence. There are no customers or prices. Next: the first real run on an AMD GPU, the LLM backend against a real model, and the container on a ROCm base. The code is MIT licensed, and was written with substantial help from Claude through Claude Code."
+1. Terminal on the GPU machine: `--index` starting the service and printing the GPU name and `torch.version.hip`.
+2. Question processes writing JSON, each a new process.
+3. The VRAM line from step 8 of the self-check.
+4. The committed folder: `summary.json`, `selfcheck.log`, `vram-samples.csv`, `MANIFEST.sha256`.
+5. The fixture results as they came out, including misses. Say that the questions are invented and the result says nothing about the hidden set.
+6. The status page and `/health` after `vercel --prod`, now showing the run read from its files.
+7. If the real Match 4 spec ships a sample, the same container on that sample. If none ships, say so.
 
 ## Before recording, Alex checks
 
-1. The live URL responds and the header matches the words in the script.
-2. The Step 2 result on the day matches the three claims described. If not, change the narration.
-3. For version B only: the new trace is committed, the live site is redeployed, and `gpu_vram_after_run` in the trace shows memory in use.
-4. The video is MP4 or MOV, under 300 MB (generic limits, UNVERIFIED for Match 4).
+1. `/health` still says what the narration says.
+2. The self-check's last line is what the script says it is.
+3. For part 2: the folder is committed unedited and the live site is redeployed.
